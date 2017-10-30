@@ -1,0 +1,516 @@
+
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.languages" content="">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      
+        <link rel="shortcut icon" href="../favicon.png">
+      
+      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.12.0">
+    
+    
+      
+        <title>Data structures - c_stellar_sdk docs</title>
+      
+    
+    
+      <script src="../assets/javascripts/modernizr-e826f8942a.js"></script>
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/application-04ea671600.css">
+      
+        <link rel="stylesheet" href="../assets/stylesheets/application-23f75ab9c7.palette.css">
+      
+    
+    
+      
+        
+        
+        
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Montserrat","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    
+    
+  </head>
+  
+  
+  
+  
+    <body data-md-color-primary="blue" data-md-color-accent="pink">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="drawer">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search">
+    <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href=".." title="c_stellar_sdk docs" class="md-header-nav__button md-logo">
+          
+            
+              <img src="../favicon.png" width="24" height="24">
+            
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <span class="md-flex__ellipsis md-header-nav__title">
+          
+            
+              
+            
+            Data structures
+          
+        </span>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="search"></label>
+  <div class="md-search__inner">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" required placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query">
+      <label class="md-icon md-search__icon" for="search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset">&#xE5CD;</button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+
+  <a href="https://github.com/etale-cohomology/c_stellar_sdk" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      etale-cohomology/c_stellar_sdk
+    </div>
+  </a>
+
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+      
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="drawer">
+    <div class="md-nav__button md-logo">
+      
+        
+          <img src="../favicon.png">
+        
+      
+    </div>
+    c_stellar_sdk docs
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+
+  <a href="https://github.com/etale-cohomology/c_stellar_sdk" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      etale-cohomology/c_stellar_sdk
+    </div>
+  </a>
+
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href=".." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../examples/" title="Examples" class="md-nav__link">
+      Examples
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Data structures
+      </label>
+    
+    <a href="./" title="Data structures" class="md-nav__link md-nav__link--active">
+      Data structures
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#xlm_horizon" title="xlm_Horizon" class="md-nav__link">
+    xlm_Horizon
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#xlm_response" title="xlm_Response" class="md-nav__link">
+    xlm_Response
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#xlm_request_params" title="xlm_Request_params" class="md-nav__link">
+    xlm_Request_params
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../functions/" title="Functions" class="md-nav__link">
+      Functions
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../glossary/" title="Glossary" class="md-nav__link">
+      Glossary
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#xlm_horizon" title="xlm_Horizon" class="md-nav__link">
+    xlm_Horizon
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#xlm_response" title="xlm_Response" class="md-nav__link">
+    xlm_Response
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#xlm_request_params" title="xlm_Request_params" class="md-nav__link">
+    xlm_Request_params
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <h1 id="data-structures">Data structures<a class="headerlink" href="#data-structures" title="Permanent link">&para;</a></h1>
+<h4 id="xlm_horizon">xlm_Horizon<a class="headerlink" href="#xlm_horizon" title="Permanent link">&para;</a></h4>
+<div class="codehilite"><pre><span></span><span class="k">struct</span> <span class="n">xlm_Horizon</span><span class="p">{</span>
+<span class="n">xlm_str</span> <span class="n">root_url</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">void</span> <span class="nf">xlm_horizon_init</span><span class="p">(</span><span class="k">struct</span> <span class="n">xlm_Horizon</span><span class="o">*</span> <span class="n">horizon</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">root</span><span class="p">){</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">xlm_horizon_free</span><span class="p">(</span><span class="k">struct</span> <span class="n">xlm_Horizon</span><span class="o">*</span> <span class="n">horizon</span><span class="p">){</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<h4 id="xlm_response">xlm_Response<a class="headerlink" href="#xlm_response" title="Permanent link">&para;</a></h4>
+<div class="codehilite"><pre><span></span><span class="k">struct</span> <span class="n">xlm_Response</span><span class="p">{</span>
+<span class="n">CURL</span><span class="o">*</span> <span class="n">curl</span><span class="p">;</span>
+<span class="n">CURLcode</span> <span class="n">curl_code</span><span class="p">;</span>
+<span class="n">xlm_str</span> <span class="n">raw</span><span class="p">;</span>
+<span class="n">xlm_str</span> <span class="n">request_url</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">void</span> <span class="nf">xlm_response_init</span><span class="p">(</span><span class="k">struct</span> <span class="n">xlm_Response</span><span class="o">*</span> <span class="n">response</span><span class="p">){</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">xlm_response_free</span><span class="p">(</span><span class="k">struct</span> <span class="n">xlm_Response</span><span class="o">*</span> <span class="n">response</span><span class="p">){</span>
+<span class="p">}</span>
+
+<span class="c1">// Print a request to console!</span>
+<span class="kt">void</span> <span class="nf">xlm_show_request</span><span class="p">(</span><span class="k">struct</span> <span class="n">xlm_Response</span><span class="o">*</span> <span class="n">response</span><span class="p">){</span>
+<span class="p">}</span>
+
+<span class="c1">// Print a response to console, as a raw string!</span>
+<span class="kt">void</span> <span class="nf">xlm_show_raw</span><span class="p">(</span><span class="k">struct</span> <span class="n">xlm_Response</span><span class="o">*</span> <span class="n">response</span><span class="p">){</span>
+<span class="p">}</span> 
+</pre></div>
+
+
+<h4 id="xlm_request_params">xlm_Request_params<a class="headerlink" href="#xlm_request_params" title="Permanent link">&para;</a></h4>
+<div class="codehilite"><pre><span></span><span class="k">struct</span> <span class="n">xlm_Request_params</span><span class="p">{</span>
+<span class="c1">// Generic parameters</span>
+<span class="n">int64</span> <span class="n">cursor</span><span class="p">;</span>
+<span class="kt">char</span>  <span class="n">order</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span>
+<span class="n">int64</span> <span class="n">limit</span><span class="p">;</span>
+
+<span class="kt">char</span> <span class="n">id</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span>
+
+<span class="c1">// Parameters for accounts</span>
+<span class="kt">char</span>  <span class="n">account_id</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
+
+<span class="c1">// Parameters for orderbook trades</span>
+<span class="kt">char</span> <span class="n">selling_asset_type</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
+<span class="kt">char</span> <span class="n">selling_asset_code</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
+<span class="kt">char</span> <span class="n">selling_asset_issuer</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
+<span class="kt">char</span> <span class="n">buying_asset_type</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
+<span class="kt">char</span> <span class="n">buying_asset_code</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
+<span class="kt">char</span> <span class="n">buying_asset_issuer</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
+<span class="p">};</span>
+</pre></div>
+                
+                  
+                
+              
+              
+                
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../examples/" title="Examples" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Examples
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../functions/" title="Functions" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Functions
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="http://www.mkdocs.org" title="MkDocs">MkDocs</a>
+        and
+        <a href="http://squidfunk.github.io/mkdocs-material/" title="Material for MkDocs">
+          Material for MkDocs</a>
+      </div>
+      
+        
+  <div class="md-footer-social">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+      <a href="https://github.com/etale-cohomology" class="md-footer-social__link fa fa-github"></a>
+    
+  </div>
+
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/application-268d62d82d.js"></script>
+      
+      
+      <script>app.initialize({url:{base:".."}})</script>
+      
+    
+    
+      
+    
+  </body>
+</html>

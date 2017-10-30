@@ -1,0 +1,772 @@
+
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.languages" content="">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      
+        <link rel="shortcut icon" href="./favicon.png">
+      
+      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.12.0">
+    
+    
+      
+        <title>c_stellar_sdk docs</title>
+      
+    
+    
+      <script src="./assets/javascripts/modernizr-e826f8942a.js"></script>
+    
+    
+      <link rel="stylesheet" href="./assets/stylesheets/application-04ea671600.css">
+      
+        <link rel="stylesheet" href="./assets/stylesheets/application-23f75ab9c7.palette.css">
+      
+    
+    
+      
+        
+        
+        
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Montserrat","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    
+    
+  </head>
+  
+  
+  
+  
+    <body data-md-color-primary="blue" data-md-color-accent="pink">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="drawer">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search">
+    <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="." title="c_stellar_sdk docs" class="md-header-nav__button md-logo">
+          
+            
+              <img src="./favicon.png" width="24" height="24">
+            
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <span class="md-flex__ellipsis md-header-nav__title">
+          
+            
+              
+            
+            Home
+          
+        </span>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="search"></label>
+  <div class="md-search__inner">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" required placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query">
+      <label class="md-icon md-search__icon" for="search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset">&#xE5CD;</button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+
+  <a href="https://github.com/etale-cohomology/c_stellar_sdk" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      etale-cohomology/c_stellar_sdk
+    </div>
+  </a>
+
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+      
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="drawer">
+    <div class="md-nav__button md-logo">
+      
+        
+          <img src="./favicon.png">
+        
+      
+    </div>
+    c_stellar_sdk docs
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+
+  <a href="https://github.com/etale-cohomology/c_stellar_sdk" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      etale-cohomology/c_stellar_sdk
+    </div>
+  </a>
+
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Home
+      </label>
+    
+    <a href="." title="Home" class="md-nav__link md-nav__link--active">
+      Home
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-stellar" title="What is Stellar?" class="md-nav__link">
+    What is Stellar?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#capabilities" title="Capabilities" class="md-nav__link">
+    Capabilities
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples" title="Examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#view-account-balances-all-assets" title="View account balances (all assets)" class="md-nav__link">
+    View account balances (all assets)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#send-a-payment-with-an-account" title="Send a payment with an account" class="md-nav__link">
+    Send a payment with an account
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#show-all-ledgers-in-the-returned-records" title="Show all ledgers in the (returned) records" class="md-nav__link">
+    Show all ledgers in the (returned) records
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation-details" title="Implementation details" class="md-nav__link">
+    Implementation details
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dependencies" title="Dependencies" class="md-nav__link">
+    Dependencies
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#build" title="Build" class="md-nav__link">
+    Build
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#build-the-docs" title="Build the docs" class="md-nav__link">
+    Build the docs
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#todos" title="TODOs" class="md-nav__link">
+    TODOs
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license" title="License" class="md-nav__link">
+    License
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="examples/" title="Examples" class="md-nav__link">
+      Examples
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="data_structures/" title="Data structures" class="md-nav__link">
+      Data structures
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="functions/" title="Functions" class="md-nav__link">
+      Functions
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="glossary/" title="Glossary" class="md-nav__link">
+      Glossary
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-stellar" title="What is Stellar?" class="md-nav__link">
+    What is Stellar?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#capabilities" title="Capabilities" class="md-nav__link">
+    Capabilities
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples" title="Examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#view-account-balances-all-assets" title="View account balances (all assets)" class="md-nav__link">
+    View account balances (all assets)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#send-a-payment-with-an-account" title="Send a payment with an account" class="md-nav__link">
+    Send a payment with an account
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#show-all-ledgers-in-the-returned-records" title="Show all ledgers in the (returned) records" class="md-nav__link">
+    Show all ledgers in the (returned) records
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation-details" title="Implementation details" class="md-nav__link">
+    Implementation details
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dependencies" title="Dependencies" class="md-nav__link">
+    Dependencies
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#build" title="Build" class="md-nav__link">
+    Build
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#build-the-docs" title="Build the docs" class="md-nav__link">
+    Build the docs
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#todos" title="TODOs" class="md-nav__link">
+    TODOs
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license" title="License" class="md-nav__link">
+    License
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <h1 id="c-stellar-sdk-unofficial">C Stellar SDK (unofficial)<a class="headerlink" href="#c-stellar-sdk-unofficial" title="Permanent link">&para;</a></h1>
+<p><code>c_stellar_sdk</code> is an <em>unofficial</em> header-only lightweight pure C library to interface with the <a href="https://www.stellar.org/developers/horizon/reference/index.html"><strong>Stellar Horizon API server</strong></a>, suitable for doing high-performance analytics on Stellar data.</p>
+<p>It's intended to be a C port of <a href="https://github.com/stellar/js-stellar-sdk">js-stellar-sdk</a>, but
+it also provides custom helpers for getting financials (eg. time series for price and volume).</p>
+<h2 id="what-is-stellar">What is Stellar?<a class="headerlink" href="#what-is-stellar" title="Permanent link">&para;</a></h2>
+<p>Stellar is a <strong>descentralized federated financial network</strong> built on <a href="https://en.wikipedia.org/wiki/Blockchain"><strong>blockchain technology</strong></a> with a <strong>consensus algorithm</strong> based (not on <a href="https://en.bitcoin.it/wiki/Proof_of_work">proof-of-work</a> but) on a <a href="https://www.stellar.org/blog/stellar-consensus-protocol-proof-code/"><strong>federated Byzantine agreement system</strong></a> called the <a href="https://www.stellar.org/papers/stellar-consensus-protocol.pdf"><strong>Stellar Consensus Protocol</strong></a>.</p>
+<p>The Stellar network maintains a sequence of so-called <a href="https://www.stellar.org/developers/guides/concepts/ledger.html"><strong>ledgers</strong></a>, chained together by their hashes.</p>
+<h2 id="capabilities">Capabilities<a class="headerlink" href="#capabilities" title="Permanent link">&para;</a></h2>
+<p>With <code>c_stellar_sdk</code> you can:</p>
+<ol>
+<li>Get <strong>data</strong> from the Stellar descentralized exchange: prices, orders</li>
+<li>Query the <strong>state</strong> of the network:
+<a href="https://www.stellar.org/developers/horizon/reference/resources/account.html">accounts</a>,
+<a href="https://www.stellar.org/developers/horizon/reference/resources/ledger.html">ledgers</a>,
+<a href="https://www.stellar.org/developers/horizon/reference/resources/transaction.html">transactions</a>,
+<a href="https://www.stellar.org/developers/horizon/reference/resources/operation.html">operations</a>,
+<a href="https://www.stellar.org/developers/horizon/reference/resources/effect.html">effects</a>,
+payments,
+<a href="https://www.stellar.org/developers/horizon/reference/resources/orderbook.html">orderbooks</a>,
+<a href="https://www.stellar.org/developers/horizon/reference/resources/offer.html">offers</a></li>
+<li>Submit <strong>transactions</strong> to the network <em>(coming soon!)</em></li>
+</ol>
+<h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
+<p>For all example, see the <a href="http://cstellar.org">docs</a>.</p>
+<h4 id="view-account-balances-all-assets">View account balances (all assets)<a class="headerlink" href="#view-account-balances-all-assets" title="Permanent link">&para;</a></h4>
+<div class="codehilite"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;stellar_sdk.h&quot;</span><span class="cp"></span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+  <span class="k">struct</span> <span class="n">xlm_Horizon</span> <span class="n">horizon</span><span class="p">;</span>
+  <span class="n">xlm_horizon_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">horizon</span><span class="p">,</span> <span class="n">XLM_HORIZON_LIVE</span><span class="p">);</span>  <span class="c1">// Or `XLM_HORIZON_TESTNET`</span>
+
+  <span class="k">struct</span> <span class="n">xlm_Response</span> <span class="n">response</span><span class="p">;</span>
+  <span class="n">xlm_response_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">response</span><span class="p">);</span>
+
+  <span class="k">struct</span> <span class="n">xlm_Request_params</span> <span class="n">request_params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">.</span><span class="n">account_id</span> <span class="o">=</span> <span class="s">&quot;GB7JKG66CJN3ACX5DX43FOZTTSOI7GZUP547I3BSXIJVUX3NRYUXHE6W&quot;</span><span class="p">,</span>
+  <span class="p">};</span>
+
+  <span class="n">xlm_account</span><span class="p">(</span><span class="o">&amp;</span><span class="n">horizon</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">response</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">request_params</span><span class="p">);</span>  <span class="c1">// Send request!</span>
+
+  <span class="n">xlm_JSON</span><span class="o">*</span> <span class="n">json_root</span> <span class="o">=</span> <span class="n">json_parse</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">raw</span><span class="p">);</span>  <span class="c1">// Parse a raw JSON string!</span>
+  <span class="n">xlm_JSON</span><span class="o">*</span> <span class="n">json_balances</span> <span class="o">=</span> <span class="n">json_get</span><span class="p">(</span><span class="n">json_root</span><span class="p">,</span> <span class="s">&quot;balances&quot;</span><span class="p">);</span>
+  <span class="n">json_show</span><span class="p">(</span><span class="n">json_balances</span><span class="p">);</span>
+
+  <span class="n">m_sep</span><span class="p">();</span>
+  <span class="k">for</span><span class="p">(</span><span class="n">uint</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">json_get_array_len</span><span class="p">(</span><span class="n">json_balances</span><span class="p">);</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+    <span class="n">xlm_JSON</span><span class="o">*</span> <span class="n">json_balance_item</span> <span class="o">=</span> <span class="n">json_get_array_item</span><span class="p">(</span><span class="n">json_balances</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+    <span class="n">xlm_JSON</span><span class="o">*</span> <span class="n">json_balance</span> <span class="o">=</span> <span class="n">json_get</span><span class="p">(</span><span class="n">json_balance_item</span><span class="p">,</span> <span class="s">&quot;balance&quot;</span><span class="p">);</span>
+    <span class="n">xlm_JSON</span><span class="o">*</span> <span class="n">json_asset_type</span> <span class="o">=</span> <span class="n">json_get</span><span class="p">(</span><span class="n">json_balance_item</span><span class="p">,</span> <span class="s">&quot;asset_type&quot;</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%s  %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">json_asset_type</span><span class="o">-&gt;</span><span class="n">valuestring</span><span class="p">,</span> <span class="n">json_balance</span><span class="o">-&gt;</span><span class="n">valuestring</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="n">json_free</span><span class="p">(</span><span class="n">json_root</span><span class="p">);</span>  <span class="c1">// Deleting the root takes care of everything</span>
+  <span class="n">xlm_response_free</span><span class="p">(</span><span class="o">&amp;</span><span class="n">response</span><span class="p">);</span>
+  <span class="n">xlm_horizon_free</span><span class="p">(</span><span class="o">&amp;</span><span class="n">horizon</span><span class="p">);</span>
+  <span class="n">m_exit_success</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<h4 id="send-a-payment-with-an-account">Send a payment with an account<a class="headerlink" href="#send-a-payment-with-an-account" title="Permanent link">&para;</a></h4>
+<div class="codehilite"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;stellar_sdk.h&quot;</span><span class="cp"></span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+  <span class="c1">// 0. Build the transaction</span>
+
+  <span class="c1">// 1. Sign the transaction with the secret seed</span>
+
+  <span class="c1">// 2. Submit the transaction to the network</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<h5 id="show-all-ledgers-in-the-returned-records">Show all ledgers in the (returned) records<a class="headerlink" href="#show-all-ledgers-in-the-returned-records" title="Permanent link">&para;</a></h5>
+<div class="codehilite"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;stellar_sdk.h&quot;</span><span class="cp"></span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+  <span class="k">struct</span> <span class="n">xlm_Horizon</span> <span class="n">horizon</span><span class="p">;</span>
+  <span class="n">xlm_horizon_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">horizon</span><span class="p">,</span> <span class="n">XLM_HORIZON_LIVE</span><span class="p">);</span>  <span class="c1">// Or `XLM_HORIZON_TESTNET`</span>
+
+  <span class="k">struct</span> <span class="n">xlm_Response</span> <span class="n">response</span><span class="p">;</span>
+  <span class="n">xlm_response_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">response</span><span class="p">);</span>
+
+  <span class="k">struct</span> <span class="n">xlm_Request_params</span> <span class="n">request_params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">.</span><span class="n">cursor</span> <span class="o">=</span> <span class="mi">60496199207092224</span><span class="p">,</span>
+    <span class="p">.</span><span class="n">order</span> <span class="o">=</span> <span class="s">&quot;desc&quot;</span><span class="p">,</span>
+    <span class="p">.</span><span class="n">limit</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+  <span class="p">};</span>
+
+  <span class="n">xlm_ledgers</span><span class="p">(</span><span class="o">&amp;</span><span class="n">horizon</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">response</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">request_params</span><span class="p">);</span>  <span class="c1">// Send request!</span>
+
+  <span class="n">xlm_JSON</span><span class="o">*</span> <span class="n">json_root</span> <span class="o">=</span> <span class="n">json_parse</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">raw</span><span class="p">);</span>  <span class="c1">// Parse a raw JSON string!</span>
+  <span class="n">xlm_JSON</span><span class="o">*</span> <span class="n">json_embedded</span> <span class="o">=</span> <span class="n">json_get</span><span class="p">(</span><span class="n">json_root</span><span class="p">,</span> <span class="s">&quot;_embedded&quot;</span><span class="p">);</span>
+  <span class="n">xlm_JSON</span><span class="o">*</span> <span class="n">json_records</span> <span class="o">=</span> <span class="n">json_get</span><span class="p">(</span><span class="n">json_embedded</span><span class="p">,</span> <span class="s">&quot;records&quot;</span><span class="p">);</span>
+  <span class="n">json_show</span><span class="p">(</span><span class="n">json_records</span><span class="p">);</span>
+
+  <span class="n">uint</span> <span class="n">n_records</span> <span class="o">=</span> <span class="n">json_get_array_len</span><span class="p">(</span><span class="n">json_records</span><span class="p">);</span>
+
+  <span class="n">m_sep</span><span class="p">();</span>
+  <span class="k">for</span><span class="p">(</span><span class="n">uint</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n_records</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>  <span class="c1">// Grab all ledgers from the records!</span>
+    <span class="n">xlm_JSON</span><span class="o">*</span> <span class="n">json_record</span> <span class="o">=</span> <span class="n">json_get_array_item</span><span class="p">(</span><span class="n">json_records</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+    <span class="k">struct</span> <span class="n">xlm_Ledger</span> <span class="n">ledger</span><span class="p">;</span>
+    <span class="n">xlm_ledger_from_json</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ledger</span><span class="p">,</span> <span class="n">json_record</span><span class="p">);</span>
+    <span class="n">puts</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">);</span>  <span class="n">xlm_ledger_show</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ledger</span><span class="p">);</span>  <span class="c1">// Show the ledger object from its internal format</span>
+  <span class="p">}</span>
+
+  <span class="n">json_free</span><span class="p">(</span><span class="n">json_root</span><span class="p">);</span>  <span class="c1">// Deleting the root takes care of everything</span>
+  <span class="n">xlm_response_free</span><span class="p">(</span><span class="o">&amp;</span><span class="n">response</span><span class="p">);</span>
+  <span class="n">xlm_horizon_free</span><span class="p">(</span><span class="o">&amp;</span><span class="n">horizon</span><span class="p">);</span>
+  <span class="n">m_exit_success</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<h2 id="implementation-details">Implementation details<a class="headerlink" href="#implementation-details" title="Permanent link">&para;</a></h2>
+<p>Under the hood, the C Stellar SDK uses
+<a href="https://github.com/antirez/sds"><strong>SDS</strong></a> (of <a href="https://github.com/antirez/redis">Redis</a> fame) to simplify and abstract <em>string</em> operations,
+<a href="https://github.com/DaveGamble/cJSON"><strong>cJSON</strong></a> for <em>JSON</em> parsing, and
+<a href="https://curl.haxx.se/libcurl/"><strong>libcurl</strong></a> for sync/async <em>HTTP requests</em>.</p>
+<p>These libraries are wrapped in a thin abstraction layer, so that high-level functions remain oblivious to them,
+and they may be replaced by similar libraries, provided one adapts the internals of the abstraction layer keeping the external interface consistent.</p>
+<!-- ## Overview of the API
+
+The Horizon API supports multiple types of requests, with varying degrees of complexity.
+Very roughly, the complexity of requests can be classified as follows.
+
+1. Requests that take no parameters. Example: Horizon metrics
+1. Requests that take one set of parameters. Example: ledgers
+1. Requests that take multiple sets of parameters. Example: transactions for account
+1. Requests that take multiple sets of parameters and require authentication. -->
+
+<h2 id="dependencies">Dependencies<a class="headerlink" href="#dependencies" title="Permanent link">&para;</a></h2>
+<ol>
+<li><a href="https://curl.haxx.se/libcurl/">libcurl</a> should be installed and linkable (eg. <code>gcc main.c -lcurl</code>)</li>
+</ol>
+<p>On <strong>Ubuntu</strong>, run <code>sudo apt-get install libcurl4-openssl-dev</code>. On <strong>OS X</strong>, run <code>brew install curl</code>.</p>
+<h2 id="build">Build<a class="headerlink" href="#build" title="Permanent link">&para;</a></h2>
+<p>Assuming the dependencies are installed, you can run:</p>
+<div class="codehilite"><pre><span></span>git clone https://github.com/etale-cohomology/c_stellar_sdk.git
+cd c_stellar_sdk
+make
+</pre></div>
+
+
+<h2 id="build-the-docs">Build the docs<a class="headerlink" href="#build-the-docs" title="Permanent link">&para;</a></h2>
+<p>The documentation is written in Markdown and rendered via <a href="http://www.mkdocs.org/">MkDocs</a> (with the <a href="http://squidfunk.github.io/mkdocs-material/">Material theme</a> and the <a href="http://squidfunk.github.io/mkdocs-material/extensions/codehilite/">CodeHilite</a> extension). You can install these with <code>pip</code>:</p>
+<div class="codehilite"><pre><span></span>pip install mkdocs
+pip install mkdocs-material
+pip install pygments
+</pre></div>
+
+
+<p>Then, from the root directory, run</p>
+<div class="codehilite"><pre><span></span>make docs
+</pre></div>
+
+
+<p>to build the HTML/CSS/JS files into a <code>site/</code> directory, or run</p>
+<div class="codehilite"><pre><span></span>make docs_serve
+</pre></div>
+
+
+<p>to serve it locally on <code>http://127.0.0.1:8000</code>.</p>
+<!-- ## Build examples manually
+
+    gcc xlm_example_trades
+ -->
+
+<h2 id="todos">TODOs<a class="headerlink" href="#todos" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Perform operations (eg. <code>change_trust</code>, <code>manage_offer</code>)</li>
+<li>Build, sign &amp; submit transactions</li>
+<li>Decode XDR blobs</li>
+<li>Write a high-level API for event streams (currently accessible by low-level routines)</li>
+<li>Write a high-level API for async requests (currently accessible by low-level routines)</li>
+<li>Write tests</li>
+</ul>
+<h2 id="license">License<a class="headerlink" href="#license" title="Permanent link">&para;</a></h2>
+<p>MIT</p>
+                
+                  
+                
+              
+              
+                
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+        
+          <a href="examples/" title="Examples" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Examples
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="http://www.mkdocs.org" title="MkDocs">MkDocs</a>
+        and
+        <a href="http://squidfunk.github.io/mkdocs-material/" title="Material for MkDocs">
+          Material for MkDocs</a>
+      </div>
+      
+        
+  <div class="md-footer-social">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+      <a href="https://github.com/etale-cohomology" class="md-footer-social__link fa fa-github"></a>
+    
+  </div>
+
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="./assets/javascripts/application-268d62d82d.js"></script>
+      
+      
+      <script>app.initialize({url:{base:"."}})</script>
+      
+    
+    
+      
+    
+  </body>
+</html>

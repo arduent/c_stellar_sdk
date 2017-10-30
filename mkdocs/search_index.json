@@ -1,0 +1,514 @@
+{
+    "docs": [
+        {
+            "location": "/",
+            "text": "C Stellar SDK (unofficial)\n\u00b6\n\n\nc_stellar_sdk\n is an \nunofficial\n header-only lightweight pure C library to interface with the \nStellar Horizon API server\n, suitable for doing high-performance analytics on Stellar data.\n\n\nIt's intended to be a C port of \njs-stellar-sdk\n, but\nit also provides custom helpers for getting financials (eg. time series for price and volume).\n\n\nWhat is Stellar?\n\u00b6\n\n\nStellar is a \ndescentralized federated financial network\n built on \nblockchain technology\n with a \nconsensus algorithm\n based (not on \nproof-of-work\n but) on a \nfederated Byzantine agreement system\n called the \nStellar Consensus Protocol\n.\n\n\nThe Stellar network maintains a sequence of so-called \nledgers\n, chained together by their hashes.\n\n\nCapabilities\n\u00b6\n\n\nWith \nc_stellar_sdk\n you can:\n\n\n\n\nGet \ndata\n from the Stellar descentralized exchange: prices, orders\n\n\nQuery the \nstate\n of the network:\n\naccounts\n,\n\nledgers\n,\n\ntransactions\n,\n\noperations\n,\n\neffects\n,\npayments,\n\norderbooks\n,\n\noffers\n\n\nSubmit \ntransactions\n to the network \n(coming soon!)\n\n\n\n\nExamples\n\u00b6\n\n\nFor all example, see the \ndocs\n.\n\n\nView account balances (all assets)\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n  \nstruct\n \nxlm_Horizon\n \nhorizon\n;\n\n  \nxlm_horizon_init\n(\n&\nhorizon\n,\n \nXLM_HORIZON_LIVE\n);\n  \n// Or `XLM_HORIZON_TESTNET`\n\n\n  \nstruct\n \nxlm_Response\n \nresponse\n;\n\n  \nxlm_response_init\n(\n&\nresponse\n);\n\n\n  \nstruct\n \nxlm_Request_params\n \nrequest_params\n \n=\n \n{\n\n    \n.\naccount_id\n \n=\n \n\"GB7JKG66CJN3ACX5DX43FOZTTSOI7GZUP547I3BSXIJVUX3NRYUXHE6W\"\n,\n\n  \n};\n\n\n  \nxlm_account\n(\n&\nhorizon\n,\n \n&\nresponse\n,\n \n&\nrequest_params\n);\n  \n// Send request!\n\n\n  \nxlm_JSON\n*\n \njson_root\n \n=\n \njson_parse\n(\nresponse\n.\nraw\n);\n  \n// Parse a raw JSON string!\n\n  \nxlm_JSON\n*\n \njson_balances\n \n=\n \njson_get\n(\njson_root\n,\n \n\"balances\"\n);\n\n  \njson_show\n(\njson_balances\n);\n\n\n  \nm_sep\n();\n\n  \nfor\n(\nuint\n \ni\n=\n0\n;\n \ni\n<\njson_get_array_len\n(\njson_balances\n);\n \n++\ni\n){\n\n    \nxlm_JSON\n*\n \njson_balance_item\n \n=\n \njson_get_array_item\n(\njson_balances\n,\n \ni\n);\n\n    \nxlm_JSON\n*\n \njson_balance\n \n=\n \njson_get\n(\njson_balance_item\n,\n \n\"balance\"\n);\n\n    \nxlm_JSON\n*\n \njson_asset_type\n \n=\n \njson_get\n(\njson_balance_item\n,\n \n\"asset_type\"\n);\n\n    \nprintf\n(\n\"%s  %s\n\\n\n\"\n,\n \njson_asset_type\n->\nvaluestring\n,\n \njson_balance\n->\nvaluestring\n);\n\n  \n}\n\n\n  \njson_free\n(\njson_root\n);\n  \n// Deleting the root takes care of everything\n\n  \nxlm_response_free\n(\n&\nresponse\n);\n\n  \nxlm_horizon_free\n(\n&\nhorizon\n);\n\n  \nm_exit_success\n();\n\n\n}\n\n\n\n\n\n\nSend a payment with an account\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n  \n// 0. Build the transaction\n\n\n  \n// 1. Sign the transaction with the secret seed\n\n\n  \n// 2. Submit the transaction to the network\n\n\n}\n\n\n\n\n\n\nShow all ledgers in the (returned) records\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n  \nstruct\n \nxlm_Horizon\n \nhorizon\n;\n\n  \nxlm_horizon_init\n(\n&\nhorizon\n,\n \nXLM_HORIZON_LIVE\n);\n  \n// Or `XLM_HORIZON_TESTNET`\n\n\n  \nstruct\n \nxlm_Response\n \nresponse\n;\n\n  \nxlm_response_init\n(\n&\nresponse\n);\n\n\n  \nstruct\n \nxlm_Request_params\n \nrequest_params\n \n=\n \n{\n\n    \n.\ncursor\n \n=\n \n60496199207092224\n,\n\n    \n.\norder\n \n=\n \n\"desc\"\n,\n\n    \n.\nlimit\n \n=\n \n4\n,\n\n  \n};\n\n\n  \nxlm_ledgers\n(\n&\nhorizon\n,\n \n&\nresponse\n,\n \n&\nrequest_params\n);\n  \n// Send request!\n\n\n  \nxlm_JSON\n*\n \njson_root\n \n=\n \njson_parse\n(\nresponse\n.\nraw\n);\n  \n// Parse a raw JSON string!\n\n  \nxlm_JSON\n*\n \njson_embedded\n \n=\n \njson_get\n(\njson_root\n,\n \n\"_embedded\"\n);\n\n  \nxlm_JSON\n*\n \njson_records\n \n=\n \njson_get\n(\njson_embedded\n,\n \n\"records\"\n);\n\n  \njson_show\n(\njson_records\n);\n\n\n  \nuint\n \nn_records\n \n=\n \njson_get_array_len\n(\njson_records\n);\n\n\n  \nm_sep\n();\n\n  \nfor\n(\nuint\n \ni\n=\n0\n;\n \ni\n<\nn_records\n;\n \n++\ni\n){\n  \n// Grab all ledgers from the records!\n\n    \nxlm_JSON\n*\n \njson_record\n \n=\n \njson_get_array_item\n(\njson_records\n,\n \ni\n);\n\n    \nstruct\n \nxlm_Ledger\n \nledger\n;\n\n    \nxlm_ledger_from_json\n(\n&\nledger\n,\n \njson_record\n);\n\n    \nputs\n(\n\"\"\n);\n  \nxlm_ledger_show\n(\n&\nledger\n);\n  \n// Show the ledger object from its internal format\n\n  \n}\n\n\n  \njson_free\n(\njson_root\n);\n  \n// Deleting the root takes care of everything\n\n  \nxlm_response_free\n(\n&\nresponse\n);\n\n  \nxlm_horizon_free\n(\n&\nhorizon\n);\n\n  \nm_exit_success\n();\n\n\n}\n\n\n\n\n\n\nImplementation details\n\u00b6\n\n\nUnder the hood, the C Stellar SDK uses\n\nSDS\n (of \nRedis\n fame) to simplify and abstract \nstring\n operations,\n\ncJSON\n for \nJSON\n parsing, and\n\nlibcurl\n for sync/async \nHTTP requests\n.\n\n\nThese libraries are wrapped in a thin abstraction layer, so that high-level functions remain oblivious to them,\nand they may be replaced by similar libraries, provided one adapts the internals of the abstraction layer keeping the external interface consistent.\n\n\n\n\n\nDependencies\n\u00b6\n\n\n\n\nlibcurl\n should be installed and linkable (eg. \ngcc main.c -lcurl\n)\n\n\n\n\nOn \nUbuntu\n, run \nsudo apt-get install libcurl4-openssl-dev\n. On \nOS X\n, run \nbrew install curl\n.\n\n\nBuild\n\u00b6\n\n\nAssuming the dependencies are installed, you can run:\n\n\ngit clone https://github.com/etale-cohomology/c_stellar_sdk.git\ncd c_stellar_sdk\nmake\n\n\n\n\n\nBuild the docs\n\u00b6\n\n\nThe documentation is written in Markdown and rendered via \nMkDocs\n (with the \nMaterial theme\n and the \nCodeHilite\n extension). You can install these with \npip\n:\n\n\npip install mkdocs\npip install mkdocs-material\npip install pygments\n\n\n\n\n\nThen, from the root directory, run\n\n\nmake docs\n\n\n\n\n\nto build the HTML/CSS/JS files into a \nsite/\n directory, or run\n\n\nmake docs_serve\n\n\n\n\n\nto serve it locally on \nhttp://127.0.0.1:8000\n.\n\n\n\n\n\nTODOs\n\u00b6\n\n\n\n\nPerform operations (eg. \nchange_trust\n, \nmanage_offer\n)\n\n\nBuild, sign & submit transactions\n\n\nDecode XDR blobs\n\n\nWrite a high-level API for event streams (currently accessible by low-level routines)\n\n\nWrite a high-level API for async requests (currently accessible by low-level routines)\n\n\nWrite tests\n\n\n\n\nLicense\n\u00b6\n\n\nMIT",
+            "title": "Home"
+        },
+        {
+            "location": "/#c-stellar-sdk-unofficial",
+            "text": "c_stellar_sdk  is an  unofficial  header-only lightweight pure C library to interface with the  Stellar Horizon API server , suitable for doing high-performance analytics on Stellar data.  It's intended to be a C port of  js-stellar-sdk , but\nit also provides custom helpers for getting financials (eg. time series for price and volume).",
+            "title": "C Stellar SDK (unofficial)"
+        },
+        {
+            "location": "/#what-is-stellar",
+            "text": "Stellar is a  descentralized federated financial network  built on  blockchain technology  with a  consensus algorithm  based (not on  proof-of-work  but) on a  federated Byzantine agreement system  called the  Stellar Consensus Protocol .  The Stellar network maintains a sequence of so-called  ledgers , chained together by their hashes.",
+            "title": "What is Stellar?"
+        },
+        {
+            "location": "/#capabilities",
+            "text": "With  c_stellar_sdk  you can:   Get  data  from the Stellar descentralized exchange: prices, orders  Query the  state  of the network: accounts , ledgers , transactions , operations , effects ,\npayments, orderbooks , offers  Submit  transactions  to the network  (coming soon!)",
+            "title": "Capabilities"
+        },
+        {
+            "location": "/#examples",
+            "text": "For all example, see the  docs .",
+            "title": "Examples"
+        },
+        {
+            "location": "/#view-account-balances-all-assets",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){ \n   struct   xlm_Horizon   horizon ; \n   xlm_horizon_init ( & horizon ,   XLM_HORIZON_LIVE );    // Or `XLM_HORIZON_TESTNET` \n\n   struct   xlm_Response   response ; \n   xlm_response_init ( & response ); \n\n   struct   xlm_Request_params   request_params   =   { \n     . account_id   =   \"GB7JKG66CJN3ACX5DX43FOZTTSOI7GZUP547I3BSXIJVUX3NRYUXHE6W\" , \n   }; \n\n   xlm_account ( & horizon ,   & response ,   & request_params );    // Send request! \n\n   xlm_JSON *   json_root   =   json_parse ( response . raw );    // Parse a raw JSON string! \n   xlm_JSON *   json_balances   =   json_get ( json_root ,   \"balances\" ); \n   json_show ( json_balances ); \n\n   m_sep (); \n   for ( uint   i = 0 ;   i < json_get_array_len ( json_balances );   ++ i ){ \n     xlm_JSON *   json_balance_item   =   json_get_array_item ( json_balances ,   i ); \n     xlm_JSON *   json_balance   =   json_get ( json_balance_item ,   \"balance\" ); \n     xlm_JSON *   json_asset_type   =   json_get ( json_balance_item ,   \"asset_type\" ); \n     printf ( \"%s  %s \\n \" ,   json_asset_type -> valuestring ,   json_balance -> valuestring ); \n   } \n\n   json_free ( json_root );    // Deleting the root takes care of everything \n   xlm_response_free ( & response ); \n   xlm_horizon_free ( & horizon ); \n   m_exit_success ();  }",
+            "title": "View account balances (all assets)"
+        },
+        {
+            "location": "/#send-a-payment-with-an-account",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){ \n   // 0. Build the transaction \n\n   // 1. Sign the transaction with the secret seed \n\n   // 2. Submit the transaction to the network  }",
+            "title": "Send a payment with an account"
+        },
+        {
+            "location": "/#show-all-ledgers-in-the-returned-records",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){ \n   struct   xlm_Horizon   horizon ; \n   xlm_horizon_init ( & horizon ,   XLM_HORIZON_LIVE );    // Or `XLM_HORIZON_TESTNET` \n\n   struct   xlm_Response   response ; \n   xlm_response_init ( & response ); \n\n   struct   xlm_Request_params   request_params   =   { \n     . cursor   =   60496199207092224 , \n     . order   =   \"desc\" , \n     . limit   =   4 , \n   }; \n\n   xlm_ledgers ( & horizon ,   & response ,   & request_params );    // Send request! \n\n   xlm_JSON *   json_root   =   json_parse ( response . raw );    // Parse a raw JSON string! \n   xlm_JSON *   json_embedded   =   json_get ( json_root ,   \"_embedded\" ); \n   xlm_JSON *   json_records   =   json_get ( json_embedded ,   \"records\" ); \n   json_show ( json_records ); \n\n   uint   n_records   =   json_get_array_len ( json_records ); \n\n   m_sep (); \n   for ( uint   i = 0 ;   i < n_records ;   ++ i ){    // Grab all ledgers from the records! \n     xlm_JSON *   json_record   =   json_get_array_item ( json_records ,   i ); \n     struct   xlm_Ledger   ledger ; \n     xlm_ledger_from_json ( & ledger ,   json_record ); \n     puts ( \"\" );    xlm_ledger_show ( & ledger );    // Show the ledger object from its internal format \n   } \n\n   json_free ( json_root );    // Deleting the root takes care of everything \n   xlm_response_free ( & response ); \n   xlm_horizon_free ( & horizon ); \n   m_exit_success ();  }",
+            "title": "Show all ledgers in the (returned) records"
+        },
+        {
+            "location": "/#implementation-details",
+            "text": "Under the hood, the C Stellar SDK uses SDS  (of  Redis  fame) to simplify and abstract  string  operations, cJSON  for  JSON  parsing, and libcurl  for sync/async  HTTP requests .  These libraries are wrapped in a thin abstraction layer, so that high-level functions remain oblivious to them,\nand they may be replaced by similar libraries, provided one adapts the internals of the abstraction layer keeping the external interface consistent.",
+            "title": "Implementation details"
+        },
+        {
+            "location": "/#dependencies",
+            "text": "libcurl  should be installed and linkable (eg.  gcc main.c -lcurl )   On  Ubuntu , run  sudo apt-get install libcurl4-openssl-dev . On  OS X , run  brew install curl .",
+            "title": "Dependencies"
+        },
+        {
+            "location": "/#build",
+            "text": "Assuming the dependencies are installed, you can run:  git clone https://github.com/etale-cohomology/c_stellar_sdk.git\ncd c_stellar_sdk\nmake",
+            "title": "Build"
+        },
+        {
+            "location": "/#build-the-docs",
+            "text": "The documentation is written in Markdown and rendered via  MkDocs  (with the  Material theme  and the  CodeHilite  extension). You can install these with  pip :  pip install mkdocs\npip install mkdocs-material\npip install pygments  Then, from the root directory, run  make docs  to build the HTML/CSS/JS files into a  site/  directory, or run  make docs_serve  to serve it locally on  http://127.0.0.1:8000 .",
+            "title": "Build the docs"
+        },
+        {
+            "location": "/#todos",
+            "text": "Perform operations (eg.  change_trust ,  manage_offer )  Build, sign & submit transactions  Decode XDR blobs  Write a high-level API for event streams (currently accessible by low-level routines)  Write a high-level API for async requests (currently accessible by low-level routines)  Write tests",
+            "title": "TODOs"
+        },
+        {
+            "location": "/#license",
+            "text": "MIT",
+            "title": "License"
+        },
+        {
+            "location": "/examples/",
+            "text": "Examples\n\u00b6\n\n\nHigh-level (synchronous) API\n\u00b6\n\n\n\n\nView account balances (all assets)\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n  \nstruct\n \nxlm_Horizon\n \nhorizon\n;\n\n  \nxlm_horizon_init\n(\n&\nhorizon\n,\n \nXLM_HORIZON_LIVE\n);\n  \n// Or `XLM_HORIZON_TESTNET`\n\n\n  \nstruct\n \nxlm_Response\n \nresponse\n;\n\n  \nxlm_response_init\n(\n&\nresponse\n);\n\n\n  \nstruct\n \nxlm_Request_params\n \nrequest_params\n \n=\n \n{\n\n    \n.\naccount_id\n \n=\n \n\"GB7JKG66CJN3ACX5DX43FOZTTSOI7GZUP547I3BSXIJVUX3NRYUXHE6W\"\n,\n\n  \n};\n\n\n  \nxlm_account\n(\n&\nhorizon\n,\n \n&\nresponse\n,\n \n&\nrequest_params\n);\n  \n// Send request!\n\n\n  \nxlm_JSON\n*\n \njson_root\n \n=\n \njson_parse\n(\nresponse\n.\nraw\n);\n  \n// Parse a raw JSON string!\n\n  \nxlm_JSON\n*\n \njson_balances\n \n=\n \njson_get\n(\njson_root\n,\n \n\"balances\"\n);\n\n  \njson_show\n(\njson_balances\n);\n\n\n  \nm_sep\n();\n\n  \nfor\n(\nuint\n \ni\n=\n0\n;\n \ni\n<\njson_get_array_len\n(\njson_balances\n);\n \n++\ni\n){\n\n    \nxlm_JSON\n*\n \njson_balance_item\n \n=\n \njson_get_array_item\n(\njson_balances\n,\n \ni\n);\n\n    \nxlm_JSON\n*\n \njson_balance\n \n=\n \njson_get\n(\njson_balance_item\n,\n \n\"balance\"\n);\n\n    \nxlm_JSON\n*\n \njson_asset_type\n \n=\n \njson_get\n(\njson_balance_item\n,\n \n\"asset_type\"\n);\n\n    \nprintf\n(\n\"%s  %s\n\\n\n\"\n,\n \njson_asset_type\n->\nvaluestring\n,\n \njson_balance\n->\nvaluestring\n);\n\n  \n}\n\n\n  \njson_free\n(\njson_root\n);\n  \n// Deleting the root takes care of everything\n\n  \nxlm_response_free\n(\n&\nresponse\n);\n\n  \nxlm_horizon_free\n(\n&\nhorizon\n);\n\n  \nm_exit_success\n();\n\n\n}\n\n\n\n\n\n\nSend a payment with an account\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n  \n// 0. Build the transaction\n\n\n  \n// 1. Sign the transaction with the secret seed\n\n\n  \n// 2. Submit the transaction to the network\n\n\n}\n\n\n\n\n\n\n\n\nView all ledgers\n\u00b6\n\n\nShow the first ledger in the (returned) records\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n  \n// Create a Horizon object, to hold server data\n\n  \nstruct\n \nxlm_Horizon\n \nhorizon\n;\n\n  \nxlm_horizon_init\n(\n&\nhorizon\n,\n \nXLM_HORIZON_LIVE\n);\n  \n// Or `XLM_HORIZON_TESTNET`\n\n\n  \n// Create a Response object, to hold the response and other data\n\n  \nstruct\n \nxlm_Response\n \nresponse\n;\n\n  \nxlm_response_init\n(\n&\nresponse\n);\n\n\n  \n// Create a Request_params object, to specify request parameters.\n\n  \n// You may also use the default constructor `XLM_REQUEST_PARAMS_DEFAULT`\n\n  \nstruct\n \nxlm_Request_params\n \nrequest_params\n \n=\n \n{\n\n    \n.\ncursor\n \n=\n \n60496199207092224\n,\n\n    \n.\norder\n \n=\n \n\"desc\"\n,\n\n    \n.\nlimit\n \n=\n \n2\n,\n\n  \n};\n\n\n  \nxlm_ledgers\n(\n&\nhorizon\n,\n \n&\nresponse\n,\n \n&\nrequest_params\n);\n  \n// Send request!\n\n\n  \n// ---------------------\n\n  \nxlm_JSON\n*\n \njson_root\n \n=\n \njson_parse\n(\nresponse\n.\nraw\n);\n  \n// Parse a raw JSON string!\n\n  \nxlm_JSON\n*\n \njson_embedded\n \n=\n \njson_get\n(\njson_root\n,\n \n\"_embedded\"\n);\n\n  \nxlm_JSON\n*\n \njson_records\n \n=\n \njson_get\n(\njson_embedded\n,\n \n\"records\"\n);\n\n  \njson_show\n(\njson_records\n);\n\n\n  \n// Grab the first ledger from the records!\n\n  \nxlm_JSON\n*\n \njson_record0\n \n=\n \njson_get_array_item\n(\njson_records\n,\n \n0\n);\n\n  \njson_show\n(\njson_record0\n);\n\n\n  \n// From the ledger JSON, initialize a proper C ledger object\n\n  \nstruct\n \nxlm_Ledger\n \nledger0\n;\n\n  \nxlm_ledger_from_json\n(\n&\nledger0\n,\n \njson_record0\n);\n\n  \nm_sep\n();\n\n  \nxlm_ledger_show\n(\n&\nledger0\n);\n  \n// Show the ledger object from its internal format\n\n\n  \n// ---------------------\n\n  \n// Clean up\n\n  \njson_free\n(\njson_root\n);\n  \n// Deleting the root takes care of everything\n\n  \nxlm_response_free\n(\n&\nresponse\n);\n\n  \nxlm_horizon_free\n(\n&\nhorizon\n);\n\n  \nm_exit_success\n();\n\n\n}\n\n\n\n\n\n\nShow all ledgers in the (returned) records\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n  \nstruct\n \nxlm_Horizon\n \nhorizon\n;\n\n  \nxlm_horizon_init\n(\n&\nhorizon\n,\n \nXLM_HORIZON_LIVE\n);\n  \n// Or `XLM_HORIZON_TESTNET`\n\n\n  \nstruct\n \nxlm_Response\n \nresponse\n;\n\n  \nxlm_response_init\n(\n&\nresponse\n);\n\n\n  \nstruct\n \nxlm_Request_params\n \nrequest_params\n \n=\n \n{\n\n    \n.\ncursor\n \n=\n \n60496199207092224\n,\n\n    \n.\norder\n \n=\n \n\"desc\"\n,\n\n    \n.\nlimit\n \n=\n \n4\n,\n\n  \n};\n\n\n  \nxlm_ledgers\n(\n&\nhorizon\n,\n \n&\nresponse\n,\n \n&\nrequest_params\n);\n  \n// Send request!\n\n\n  \nxlm_JSON\n*\n \njson_root\n \n=\n \njson_parse\n(\nresponse\n.\nraw\n);\n  \n// Parse a raw JSON string!\n\n  \nxlm_JSON\n*\n \njson_embedded\n \n=\n \njson_get\n(\njson_root\n,\n \n\"_embedded\"\n);\n\n  \nxlm_JSON\n*\n \njson_records\n \n=\n \njson_get\n(\njson_embedded\n,\n \n\"records\"\n);\n\n  \njson_show\n(\njson_records\n);\n\n\n  \nuint\n \nn_records\n \n=\n \njson_get_array_len\n(\njson_records\n);\n\n\n  \nm_sep\n();\n\n  \nfor\n(\nuint\n \ni\n=\n0\n;\n \ni\n<\nn_records\n;\n \n++\ni\n){\n  \n// Grab all ledgers from the records!\n\n    \nxlm_JSON\n*\n \njson_record\n \n=\n \njson_get_array_item\n(\njson_records\n,\n \ni\n);\n\n    \nstruct\n \nxlm_Ledger\n \nledger\n;\n\n    \nxlm_ledger_from_json\n(\n&\nledger\n,\n \njson_record\n);\n\n    \nputs\n(\n\"\"\n);\n  \nxlm_ledger_show\n(\n&\nledger\n);\n  \n// Show the ledger object from its internal format\n\n  \n}\n\n\n  \njson_free\n(\njson_root\n);\n  \n// Deleting the root takes care of everything\n\n  \nxlm_response_free\n(\n&\nresponse\n);\n\n  \nxlm_horizon_free\n(\n&\nhorizon\n);\n\n  \nm_exit_success\n();\n\n\n}\n\n\n\n\n\n\nView a single ledger\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n  \nstruct\n \nxlm_Horizon\n \nhorizon\n;\n\n  \nxlm_horizon_init\n(\n&\nhorizon\n,\n \nXLM_HORIZON_LIVE\n);\n  \n// Or `XLM_HORIZON_TESTNET`\n\n\n  \nstruct\n \nxlm_Response\n \nresponse\n;\n\n  \nxlm_response_init\n(\n&\nresponse\n);\n\n\n  \nstruct\n \nxlm_Request_params\n \nrequest_params\n \n=\n \n{\n\n    \n.\ncursor\n \n=\n \n14085369\n,\n\n  \n};\n\n\n  \nxlm_ledger\n(\n&\nhorizon\n,\n \n&\nresponse\n,\n \n&\nrequest_params\n);\n\n\n  \nxlm_JSON\n*\n \njson_root\n \n=\n \njson_parse\n(\nresponse\n.\nraw\n);\n\n\n  \nstruct\n \nxlm_Ledger\n \nledger\n;\n\n  \nxlm_ledger_from_json\n(\n&\nledger\n,\n \njson_root\n);\n\n  \nm_sep\n();\n  \nxlm_ledger_show\n(\n&\nledger\n);\n\n\n  \njson_free\n(\njson_root\n);\n\n  \nxlm_response_free\n(\n&\nresponse\n);\n\n  \nxlm_horizon_free\n(\n&\nhorizon\n);\n\n  \nm_exit_success\n();\n\n\n}\n\n\n\n\n\n\nView transactions for a ledger\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n  \nstruct\n \nxlm_Horizon\n \nhorizon\n;\n\n  \nxlm_horizon_init\n(\n&\nhorizon\n,\n \nXLM_HORIZON_LIVE\n);\n  \n// Or `XLM_HORIZON_TESTNET`\n\n\n  \nstruct\n \nxlm_Response\n \nresponse\n;\n\n  \nxlm_response_init\n(\n&\nresponse\n);\n\n\n  \nstruct\n \nxlm_Request_params\n \nrequest_params\n \n=\n \n{\n\n    \n.\ncursor\n \n=\n \n14085369\n,\n\n  \n};\n\n\n  \nxlm_ledger_transactions\n(\n&\nhorizon\n,\n \n&\nresponse\n,\n \n&\nrequest_params\n);\n\n\n  \nxlm_JSON\n*\n \njson_root\n \n=\n \njson_parse\n(\nresponse\n.\nraw\n);\n  \n// Parse a raw JSON string!\n\n  \njson_show\n(\njson_root\n);\n\n\n  \njson_free\n(\njson_root\n);\n\n  \nxlm_response_free\n(\n&\nresponse\n);\n\n  \nxlm_horizon_free\n(\n&\nhorizon\n);\n\n  \nm_exit_success\n();\n\n\n}\n\n\n\n\n\n\nView operations for a ledger\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n  \nstruct\n \nxlm_Horizon\n \nhorizon\n;\n\n  \nxlm_horizon_init\n(\n&\nhorizon\n,\n \nXLM_HORIZON_LIVE\n);\n  \n// Or `XLM_HORIZON_TESTNET`\n\n\n  \nstruct\n \nxlm_Response\n \nresponse\n;\n\n  \nxlm_response_init\n(\n&\nresponse\n);\n\n\n  \nstruct\n \nxlm_Request_params\n \nrequest_params\n \n=\n \n{\n\n    \n.\ncursor\n \n=\n \n14085369\n,\n\n  \n};\n\n\n  \nxlm_ledger_operations\n(\n&\nhorizon\n,\n \n&\nresponse\n,\n \n&\nrequest_params\n);\n\n\n  \nxlm_JSON\n*\n \njson_root\n \n=\n \njson_parse\n(\nresponse\n.\nraw\n);\n  \n// Parse a raw JSON string!\n\n  \njson_show\n(\njson_root\n);\n\n\n  \njson_free\n(\njson_root\n);\n\n  \nxlm_response_free\n(\n&\nresponse\n);\n\n  \nxlm_horizon_free\n(\n&\nhorizon\n);\n\n  \nm_exit_success\n();\n\n\n}\n\n\n\n\n\n\nView effects for a ledger\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n  \nstruct\n \nxlm_Horizon\n \nhorizon\n;\n\n  \nxlm_horizon_init\n(\n&\nhorizon\n,\n \nXLM_HORIZON_LIVE\n);\n  \n// Or `XLM_HORIZON_TESTNET`\n\n\n  \nstruct\n \nxlm_Response\n \nresponse\n;\n\n  \nxlm_response_init\n(\n&\nresponse\n);\n\n\n  \nstruct\n \nxlm_Request_params\n \nrequest_params\n \n=\n \n{\n\n    \n.\ncursor\n \n=\n \n14085369\n,\n\n  \n};\n\n\n  \nxlm_ledger_effects\n(\n&\nhorizon\n,\n \n&\nresponse\n,\n \n&\nrequest_params\n);\n\n\n  \nxlm_JSON\n*\n \njson_root\n \n=\n \njson_parse\n(\nresponse\n.\nraw\n);\n  \n// Parse a raw JSON string!\n\n  \njson_show\n(\njson_root\n);\n\n\n  \njson_free\n(\njson_root\n);\n\n  \nxlm_response_free\n(\n&\nresponse\n);\n\n  \nxlm_horizon_free\n(\n&\nhorizon\n);\n\n  \nm_exit_success\n();\n\n\n}\n\n\n\n\n\n\nView payments for a ledger\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n  \nstruct\n \nxlm_Horizon\n \nhorizon\n;\n\n  \nxlm_horizon_init\n(\n&\nhorizon\n,\n \nXLM_HORIZON_LIVE\n);\n  \n// Or `XLM_HORIZON_TESTNET`\n\n\n  \nstruct\n \nxlm_Response\n \nresponse\n;\n\n  \nxlm_response_init\n(\n&\nresponse\n);\n\n\n  \nstruct\n \nxlm_Request_params\n \nrequest_params\n \n=\n \n{\n\n    \n.\ncursor\n \n=\n \n14085369\n,\n\n  \n};\n\n\n  \nxlm_ledger_payments\n(\n&\nhorizon\n,\n \n&\nresponse\n,\n \n&\nrequest_params\n);\n\n\n  \nxlm_JSON\n*\n \njson_root\n \n=\n \njson_parse\n(\nresponse\n.\nraw\n);\n  \n// Parse a raw JSON string!\n\n  \njson_show\n(\njson_root\n);\n\n\n  \njson_free\n(\njson_root\n);\n\n  \nxlm_response_free\n(\n&\nresponse\n);\n\n  \nxlm_horizon_free\n(\n&\nhorizon\n);\n\n  \nm_exit_success\n();\n\n\n}\n\n\n\n\n\n\n\n\nView all transactions\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n  \nstruct\n \nxlm_Horizon\n \nhorizon\n;\n\n  \nxlm_horizon_init\n(\n&\nhorizon\n,\n \nXLM_HORIZON_LIVE\n);\n  \n// Or `XLM_HORIZON_TESTNET`\n\n\n  \nstruct\n \nxlm_Response\n \nresponse\n;\n\n  \nxlm_response_init\n(\n&\nresponse\n);\n\n\n  \nstruct\n \nxlm_Request_params\n \nrequest_params\n \n=\n \n{\n\n    \n.\ncursor\n \n=\n \n60496199207092224\n,\n\n    \n.\norder\n \n=\n \n\"desc\"\n,\n\n    \n.\nlimit\n \n=\n \n2\n,\n\n  \n};\n\n\n  \nxlm_transactions\n(\n&\nhorizon\n,\n \n&\nresponse\n,\n \n&\nrequest_params\n);\n  \n// Send request!\n\n\n  \nxlm_JSON\n*\n \njson_root\n \n=\n \njson_parse\n(\nresponse\n.\nraw\n);\n  \n// Parse a raw JSON string!\n\n  \nxlm_JSON\n*\n \njson_embedded\n \n=\n \njson_get\n(\njson_root\n,\n \n\"_embedded\"\n);\n\n  \nxlm_JSON\n*\n \njson_records\n \n=\n \njson_get\n(\njson_embedded\n,\n \n\"records\"\n);\n\n  \njson_show\n(\njson_records\n);\n\n\n  \nuint\n \nn_records\n \n=\n \njson_get_array_len\n(\njson_records\n);\n\n\n  \nm_sep\n();\n\n  \nfor\n(\nuint\n \ni\n=\n0\n;\n \ni\n<\nn_records\n;\n \n++\ni\n){\n\n    \nxlm_JSON\n*\n \njson_record\n \n=\n \njson_get_array_item\n(\njson_records\n,\n \ni\n);\n\n    \nxlm_JSON\n*\n \njson_hash\n \n=\n \njson_get\n(\njson_record\n,\n \n\"hash\"\n);\n\n    \nxlm_JSON\n*\n \njson_ledger\n \n=\n \njson_get\n(\njson_record\n,\n \n\"ledger\"\n);\n\n    \nxlm_JSON\n*\n \njson_created_at\n \n=\n \njson_get\n(\njson_record\n,\n \n\"created_at\"\n);\n\n    \nm_puts\n();\n\n    \nprintf\n(\n\"%24s  \"\n,\n \n\"hash\"\n);\n  \njson_show\n(\njson_hash\n);\n\n    \nprintf\n(\n\"%24s  \"\n,\n \n\"ledger\"\n);\n  \njson_show\n(\njson_ledger\n);\n\n    \nprintf\n(\n\"%24s  \"\n,\n \n\"created_at\"\n);\n  \njson_show\n(\njson_created_at\n);\n\n  \n}\n\n\n  \njson_free\n(\njson_root\n);\n  \n// Deleting the root takes care of everything\n\n  \nxlm_response_free\n(\n&\nresponse\n);\n\n  \nxlm_horizon_free\n(\n&\nhorizon\n);\n\n  \nm_exit_success\n();\n\n\n}\n\n\n\n\n\n\nView a single transaction\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n  \nstruct\n \nxlm_Horizon\n \nhorizon\n;\n\n  \nxlm_horizon_init\n(\n&\nhorizon\n,\n \nXLM_HORIZON_LIVE\n);\n  \n// Or `XLM_HORIZON_TESTNET`\n\n\n  \nstruct\n \nxlm_Response\n \nresponse\n;\n\n  \nxlm_response_init\n(\n&\nresponse\n);\n\n\n  \nstruct\n \nxlm_Request_params\n \nrequest_params\n \n=\n \n{\n\n    \n.\nid\n \n=\n \n\"70dbba321418c3e21f6c05216ed3dadbfc1413672cc2a366a81ea4fbd2308c16\"\n,\n\n  \n};\n\n\n  \nxlm_transaction\n(\n&\nhorizon\n,\n \n&\nresponse\n,\n \n&\nrequest_params\n);\n  \n// Send request!\n\n\n  \nxlm_JSON\n*\n \njson_root\n \n=\n \njson_parse\n(\nresponse\n.\nraw\n);\n  \n// Parse a raw JSON string!\n\n  \njson_show\n(\njson_root\n);\n\n\n  \njson_free\n(\njson_root\n);\n  \n// Deleting the root takes care of everything\n\n  \nxlm_response_free\n(\n&\nresponse\n);\n\n  \nxlm_horizon_free\n(\n&\nhorizon\n);\n\n  \nm_exit_success\n();\n\n\n}\n\n\n\n\n\n\nView operations for a transaction\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n  \nstruct\n \nxlm_Horizon\n \nhorizon\n;\n\n  \nxlm_horizon_init\n(\n&\nhorizon\n,\n \nXLM_HORIZON_LIVE\n);\n  \n// Or `XLM_HORIZON_TESTNET`\n\n\n  \nstruct\n \nxlm_Response\n \nresponse\n;\n\n  \nxlm_response_init\n(\n&\nresponse\n);\n\n\n  \nstruct\n \nxlm_Request_params\n \nrequest_params\n \n=\n \n{\n\n    \n.\nid\n \n=\n \n\"70dbba321418c3e21f6c05216ed3dadbfc1413672cc2a366a81ea4fbd2308c16\"\n,\n\n  \n};\n\n\n  \nxlm_transaction_operations\n(\n&\nhorizon\n,\n \n&\nresponse\n,\n \n&\nrequest_params\n);\n  \n// Send request!\n\n\n  \nxlm_JSON\n*\n \njson_root\n \n=\n \njson_parse\n(\nresponse\n.\nraw\n);\n  \n// Parse a raw JSON string!\n\n  \njson_show\n(\njson_root\n);\n\n\n  \njson_free\n(\njson_root\n);\n  \n// Deleting the root takes care of everything\n\n  \nxlm_response_free\n(\n&\nresponse\n);\n\n  \nxlm_horizon_free\n(\n&\nhorizon\n);\n\n  \nm_exit_success\n();\n\n\n}\n\n\n\n\n\n\nView effects for a transaction\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n  \nstruct\n \nxlm_Horizon\n \nhorizon\n;\n\n  \nxlm_horizon_init\n(\n&\nhorizon\n,\n \nXLM_HORIZON_LIVE\n);\n  \n// Or `XLM_HORIZON_TESTNET`\n\n\n  \nstruct\n \nxlm_Response\n \nresponse\n;\n\n  \nxlm_response_init\n(\n&\nresponse\n);\n\n\n  \nstruct\n \nxlm_Request_params\n \nrequest_params\n \n=\n \n{\n\n    \n.\nid\n \n=\n \n\"70dbba321418c3e21f6c05216ed3dadbfc1413672cc2a366a81ea4fbd2308c16\"\n,\n\n  \n};\n\n\n  \nxlm_transaction_effects\n(\n&\nhorizon\n,\n \n&\nresponse\n,\n \n&\nrequest_params\n);\n  \n// Send request!\n\n\n  \nxlm_JSON\n*\n \njson_root\n \n=\n \njson_parse\n(\nresponse\n.\nraw\n);\n  \n// Parse a raw JSON string!\n\n  \njson_show\n(\njson_root\n);\n\n\n  \njson_free\n(\njson_root\n);\n  \n// Deleting the root takes care of everything\n\n  \nxlm_response_free\n(\n&\nresponse\n);\n\n  \nxlm_horizon_free\n(\n&\nhorizon\n);\n\n  \nm_exit_success\n();\n\n\n}\n\n\n\n\n\n\nView payments for a transaction\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n  \nstruct\n \nxlm_Horizon\n \nhorizon\n;\n\n  \nxlm_horizon_init\n(\n&\nhorizon\n,\n \nXLM_HORIZON_LIVE\n);\n  \n// Or `XLM_HORIZON_TESTNET`\n\n\n  \nstruct\n \nxlm_Response\n \nresponse\n;\n\n  \nxlm_response_init\n(\n&\nresponse\n);\n\n\n  \nstruct\n \nxlm_Request_params\n \nrequest_params\n \n=\n \n{\n\n    \n.\nid\n \n=\n \n\"70dbba321418c3e21f6c05216ed3dadbfc1413672cc2a366a81ea4fbd2308c16\"\n,\n\n  \n};\n\n\n  \nxlm_transaction_payments\n(\n&\nhorizon\n,\n \n&\nresponse\n,\n \n&\nrequest_params\n);\n  \n// Send request!\n\n\n  \nxlm_JSON\n*\n \njson_root\n \n=\n \njson_parse\n(\nresponse\n.\nraw\n);\n  \n// Parse a raw JSON string!\n\n  \njson_show\n(\njson_root\n);\n\n\n  \njson_free\n(\njson_root\n);\n  \n// Deleting the root takes care of everything\n\n  \nxlm_response_free\n(\n&\nresponse\n);\n\n  \nxlm_horizon_free\n(\n&\nhorizon\n);\n\n  \nm_exit_success\n();\n\n\n}\n\n\n\n\n\n\n\n\nView all operations\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n  \nstruct\n \nxlm_Horizon\n \nhorizon\n;\n\n  \nxlm_horizon_init\n(\n&\nhorizon\n,\n \nXLM_HORIZON_LIVE\n);\n  \n// Or `XLM_HORIZON_TESTNET`\n\n\n  \nstruct\n \nxlm_Response\n \nresponse\n;\n\n  \nxlm_response_init\n(\n&\nresponse\n);\n\n\n  \nstruct\n \nxlm_Request_params\n \nrequest_params\n \n=\n \n{\n\n    \n.\ncursor\n \n=\n \n60544972855709697\n,\n\n    \n.\norder\n \n=\n \n\"desc\"\n,\n\n    \n.\nlimit\n \n=\n \n4\n,\n\n  \n};\n\n\n  \nxlm_operations\n(\n&\nhorizon\n,\n \n&\nresponse\n,\n \n&\nrequest_params\n);\n  \n// Send request!\n\n\n  \nxlm_JSON\n*\n \njson_root\n \n=\n \njson_parse\n(\nresponse\n.\nraw\n);\n  \n// Parse a raw JSON string!\n\n  \njson_show\n(\njson_root\n);\n\n\n  \njson_free\n(\njson_root\n);\n  \n// Deleting the root takes care of everything\n\n  \nxlm_response_free\n(\n&\nresponse\n);\n\n  \nxlm_horizon_free\n(\n&\nhorizon\n);\n\n  \nm_exit_success\n();\n\n\n}\n\n\n\n\n\n\nView a single operation\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n  \nstruct\n \nxlm_Horizon\n \nhorizon\n;\n\n  \nxlm_horizon_init\n(\n&\nhorizon\n,\n \nXLM_HORIZON_LIVE\n);\n  \n// Or `XLM_HORIZON_TESTNET`\n\n\n  \nstruct\n \nxlm_Response\n \nresponse\n;\n\n  \nxlm_response_init\n(\n&\nresponse\n);\n\n\n  \nstruct\n \nxlm_Request_params\n \nrequest_params\n \n=\n \n{\n\n    \n.\nid\n \n=\n \n\"60544972855709697\"\n,\n\n  \n};\n\n\n  \nxlm_operation\n(\n&\nhorizon\n,\n \n&\nresponse\n,\n \n&\nrequest_params\n);\n  \n// Send request!\n\n\n  \nxlm_JSON\n*\n \njson_root\n \n=\n \njson_parse\n(\nresponse\n.\nraw\n);\n  \n// Parse a raw JSON string!\n\n  \njson_show\n(\njson_root\n);\n\n\n  \njson_free\n(\njson_root\n);\n  \n// Deleting the root takes care of everything\n\n  \nxlm_response_free\n(\n&\nresponse\n);\n\n  \nxlm_horizon_free\n(\n&\nhorizon\n);\n\n  \nm_exit_success\n();\n\n\n}\n\n\n\n\n\n\nView effects for an operation\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n  \nstruct\n \nxlm_Horizon\n \nhorizon\n;\n\n  \nxlm_horizon_init\n(\n&\nhorizon\n,\n \nXLM_HORIZON_LIVE\n);\n  \n// Or `XLM_HORIZON_TESTNET`\n\n\n  \nstruct\n \nxlm_Response\n \nresponse\n;\n\n  \nxlm_response_init\n(\n&\nresponse\n);\n\n\n  \nstruct\n \nxlm_Request_params\n \nrequest_params\n \n=\n \n{\n\n    \n.\nid\n \n=\n \n\"60544972855709697\"\n,\n\n  \n};\n\n\n  \nxlm_operation_effects\n(\n&\nhorizon\n,\n \n&\nresponse\n,\n \n&\nrequest_params\n);\n  \n// Send request!\n\n\n  \nxlm_JSON\n*\n \njson_root\n \n=\n \njson_parse\n(\nresponse\n.\nraw\n);\n  \n// Parse a raw JSON string!\n\n  \njson_show\n(\njson_root\n);\n\n\n  \njson_free\n(\njson_root\n);\n  \n// Deleting the root takes care of everything\n\n  \nxlm_response_free\n(\n&\nresponse\n);\n\n  \nxlm_horizon_free\n(\n&\nhorizon\n);\n\n  \nm_exit_success\n();\n\n\n}\n\n\n\n\n\n\n\n\nView all effects\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n  \nstruct\n \nxlm_Horizon\n \nhorizon\n;\n\n  \nxlm_horizon_init\n(\n&\nhorizon\n,\n \nXLM_HORIZON_LIVE\n);\n  \n// Or `XLM_HORIZON_TESTNET`\n\n\n  \nstruct\n \nxlm_Response\n \nresponse\n;\n\n  \nxlm_response_init\n(\n&\nresponse\n);\n\n\n  \nstruct\n \nxlm_Request_params\n \nrequest_params\n \n=\n \n{\n\n    \n.\ncursor\n \n=\n \n60544972855709697\n,\n\n    \n.\norder\n \n=\n \n\"desc\"\n,\n\n    \n.\nlimit\n \n=\n \n4\n,\n\n  \n};\n\n\n  \nxlm_effects\n(\n&\nhorizon\n,\n \n&\nresponse\n,\n \n&\nrequest_params\n);\n  \n// Send request!\n\n\n  \nxlm_JSON\n*\n \njson_root\n \n=\n \njson_parse\n(\nresponse\n.\nraw\n);\n  \n// Parse a raw JSON string!\n\n  \njson_show\n(\njson_root\n);\n\n\n  \njson_free\n(\njson_root\n);\n  \n// Deleting the root takes care of everything\n\n  \nxlm_response_free\n(\n&\nresponse\n);\n\n  \nxlm_horizon_free\n(\n&\nhorizon\n);\n\n  \nm_exit_success\n();\n\n\n}\n\n\n\n\n\n\n\n\nView all payments\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n  \nstruct\n \nxlm_Horizon\n \nhorizon\n;\n\n  \nxlm_horizon_init\n(\n&\nhorizon\n,\n \nXLM_HORIZON_LIVE\n);\n  \n// Or `XLM_HORIZON_TESTNET`\n\n\n  \nstruct\n \nxlm_Response\n \nresponse\n;\n\n  \nxlm_response_init\n(\n&\nresponse\n);\n\n\n  \nstruct\n \nxlm_Request_params\n \nrequest_params\n \n=\n \n{\n\n    \n.\ncursor\n \n=\n \n60544972855709697\n,\n\n    \n.\norder\n \n=\n \n\"desc\"\n,\n\n    \n.\nlimit\n \n=\n \n4\n,\n\n  \n};\n\n\n  \nxlm_payments\n(\n&\nhorizon\n,\n \n&\nresponse\n,\n \n&\nrequest_params\n);\n  \n// Send request!\n\n\n  \nxlm_JSON\n*\n \njson_root\n \n=\n \njson_parse\n(\nresponse\n.\nraw\n);\n  \n// Parse a raw JSON string!\n\n  \njson_show\n(\njson_root\n);\n\n\n  \njson_free\n(\njson_root\n);\n  \n// Deleting the root takes care of everything\n\n  \nxlm_response_free\n(\n&\nresponse\n);\n\n  \nxlm_horizon_free\n(\n&\nhorizon\n);\n\n  \nm_exit_success\n();\n\n\n}\n\n\n\n\n\n\n\n\nView all trades\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n  \nstruct\n \nxlm_Horizon\n \nhorizon\n;\n\n  \nxlm_horizon_init\n(\n&\nhorizon\n,\n \nXLM_HORIZON_LIVE\n);\n  \n// Or `XLM_HORIZON_TESTNET`\n\n\n  \nstruct\n \nxlm_Response\n \nresponse\n;\n\n  \nxlm_response_init\n(\n&\nresponse\n);\n\n\n  \nstruct\n \nxlm_Request_params\n \nrequest_params\n \n=\n \n{\n\n    \n.\ncursor\n \n=\n \n60544972855709697\n,\n\n    \n.\norder\n \n=\n \n\"desc\"\n,\n\n    \n.\nlimit\n \n=\n \n4\n,\n\n  \n};\n\n\n  \nxlm_orderbook_trades\n(\n&\nhorizon\n,\n \n&\nresponse\n,\n \n&\nrequest_params\n);\n  \n// Send request!\n\n\n  \nxlm_JSON\n*\n \njson_root\n \n=\n \njson_parse\n(\nresponse\n.\nraw\n);\n  \n// Parse a raw JSON string!\n\n  \njson_show\n(\njson_root\n);\n\n\n  \njson_free\n(\njson_root\n);\n  \n// Deleting the root takes care of everything\n\n  \nxlm_response_free\n(\n&\nresponse\n);\n\n  \nxlm_horizon_free\n(\n&\nhorizon\n);\n\n  \nm_exit_success\n();\n\n\n}\n\n\n\n\n\n\nView trades for an orderbook\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n\n}\n\n\n\n\n\n\nView trades for an asset\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n\n}\n\n\n\n\n\n\nView trades for an issuer\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n\n}\n\n\n\n\n\n\n\n\nView metrics\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n  \nstruct\n \nxlm_Horizon\n \nhorizon\n;\n\n  \nxlm_horizon_init\n(\n&\nhorizon\n,\n \nXLM_HORIZON_LIVE\n);\n  \n// Or `XLM_HORIZON_TESTNET`\n\n\n  \nstruct\n \nxlm_Response\n \nresponse\n;\n\n  \nxlm_response_init\n(\n&\nresponse\n);\n\n\n  \nstruct\n \nxlm_Request_params\n \nrequest_params\n;\n\n\n  \nxlm_metrics\n(\n&\nhorizon\n,\n \n&\nresponse\n,\n \n&\nrequest_params\n);\n  \n// Send request!\n\n\n  \nxlm_JSON\n*\n \njson_root\n \n=\n \njson_parse\n(\nresponse\n.\nraw\n);\n  \n// Parse a raw JSON string!\n\n  \njson_show\n(\njson_root\n);\n\n\n  \njson_free\n(\njson_root\n);\n  \n// Deleting the root takes care of everything\n\n  \nxlm_response_free\n(\n&\nresponse\n);\n\n  \nxlm_horizon_free\n(\n&\nhorizon\n);\n\n  \nm_exit_success\n();\n\n\n}\n\n\n\n\n\n\n\n\nView transactions for an account\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n  \nstruct\n \nxlm_Horizon\n \nhorizon\n;\n\n  \nxlm_horizon_init\n(\n&\nhorizon\n,\n \nXLM_HORIZON_LIVE\n);\n  \n// Or `XLM_HORIZON_TESTNET`\n\n\n  \nstruct\n \nxlm_Response\n \nresponse\n;\n\n  \nxlm_response_init\n(\n&\nresponse\n);\n\n\n  \nstruct\n \nxlm_Request_params\n \nrequest_params\n \n=\n \n{\n\n    \n.\naccount_id\n \n=\n \n\"GB7JKG66CJN3ACX5DX43FOZTTSOI7GZUP547I3BSXIJVUX3NRYUXHE6W\"\n,\n\n  \n};\n\n\n  \nxlm_account_transactions\n(\n&\nhorizon\n,\n \n&\nresponse\n,\n \n&\nrequest_params\n);\n  \n// Send request!\n\n\n  \nxlm_JSON\n*\n \njson_root\n \n=\n \njson_parse\n(\nresponse\n.\nraw\n);\n  \n// Parse a raw JSON string!\n\n  \njson_show\n(\njson_root\n);\n\n\n  \njson_free\n(\njson_root\n);\n  \n// Deleting the root takes care of everything\n\n  \nxlm_response_free\n(\n&\nresponse\n);\n\n  \nxlm_horizon_free\n(\n&\nhorizon\n);\n\n  \nm_exit_success\n();\n\n\n}\n\n\n\n\n\n\nView operations for an account\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n  \nstruct\n \nxlm_Horizon\n \nhorizon\n;\n\n  \nxlm_horizon_init\n(\n&\nhorizon\n,\n \nXLM_HORIZON_LIVE\n);\n  \n// Or `XLM_HORIZON_TESTNET`\n\n\n  \nstruct\n \nxlm_Response\n \nresponse\n;\n\n  \nxlm_response_init\n(\n&\nresponse\n);\n\n\n  \nstruct\n \nxlm_Request_params\n \nrequest_params\n \n=\n \n{\n\n    \n.\naccount_id\n \n=\n \n\"GB7JKG66CJN3ACX5DX43FOZTTSOI7GZUP547I3BSXIJVUX3NRYUXHE6W\"\n,\n\n  \n};\n\n\n  \nxlm_account_operations\n(\n&\nhorizon\n,\n \n&\nresponse\n,\n \n&\nrequest_params\n);\n  \n// Send request!\n\n\n  \nxlm_JSON\n*\n \njson_root\n \n=\n \njson_parse\n(\nresponse\n.\nraw\n);\n  \n// Parse a raw JSON string!\n\n  \njson_show\n(\njson_root\n);\n\n\n  \njson_free\n(\njson_root\n);\n  \n// Deleting the root takes care of everything\n\n  \nxlm_response_free\n(\n&\nresponse\n);\n\n  \nxlm_horizon_free\n(\n&\nhorizon\n);\n\n  \nm_exit_success\n();\n\n\n}\n\n\n\n\n\n\nView effects for an account\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n  \nstruct\n \nxlm_Horizon\n \nhorizon\n;\n\n  \nxlm_horizon_init\n(\n&\nhorizon\n,\n \nXLM_HORIZON_LIVE\n);\n  \n// Or `XLM_HORIZON_TESTNET`\n\n\n  \nstruct\n \nxlm_Response\n \nresponse\n;\n\n  \nxlm_response_init\n(\n&\nresponse\n);\n\n\n  \nstruct\n \nxlm_Request_params\n \nrequest_params\n \n=\n \n{\n\n    \n.\naccount_id\n \n=\n \n\"GB7JKG66CJN3ACX5DX43FOZTTSOI7GZUP547I3BSXIJVUX3NRYUXHE6W\"\n,\n\n  \n};\n\n\n  \nxlm_account_effects\n(\n&\nhorizon\n,\n \n&\nresponse\n,\n \n&\nrequest_params\n);\n  \n// Send request!\n\n\n  \nxlm_JSON\n*\n \njson_root\n \n=\n \njson_parse\n(\nresponse\n.\nraw\n);\n  \n// Parse a raw JSON string!\n\n  \njson_show\n(\njson_root\n);\n\n\n  \njson_free\n(\njson_root\n);\n  \n// Deleting the root takes care of everything\n\n  \nxlm_response_free\n(\n&\nresponse\n);\n\n  \nxlm_horizon_free\n(\n&\nhorizon\n);\n\n  \nm_exit_success\n();\n\n\n}\n\n\n\n\n\n\nView payments for an account\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n  \nstruct\n \nxlm_Horizon\n \nhorizon\n;\n\n  \nxlm_horizon_init\n(\n&\nhorizon\n,\n \nXLM_HORIZON_LIVE\n);\n  \n// Or `XLM_HORIZON_TESTNET`\n\n\n  \nstruct\n \nxlm_Response\n \nresponse\n;\n\n  \nxlm_response_init\n(\n&\nresponse\n);\n\n\n  \nstruct\n \nxlm_Request_params\n \nrequest_params\n \n=\n \n{\n\n    \n.\naccount_id\n \n=\n \n\"GB7JKG66CJN3ACX5DX43FOZTTSOI7GZUP547I3BSXIJVUX3NRYUXHE6W\"\n,\n\n  \n};\n\n\n  \nxlm_account_payments\n(\n&\nhorizon\n,\n \n&\nresponse\n,\n \n&\nrequest_params\n);\n  \n// Send request!\n\n\n  \nxlm_JSON\n*\n \njson_root\n \n=\n \njson_parse\n(\nresponse\n.\nraw\n);\n  \n// Parse a raw JSON string!\n\n  \njson_show\n(\njson_root\n);\n\n\n  \njson_free\n(\njson_root\n);\n  \n// Deleting the root takes care of everything\n\n  \nxlm_response_free\n(\n&\nresponse\n);\n\n  \nxlm_horizon_free\n(\n&\nhorizon\n);\n\n  \nm_exit_success\n();\n\n\n}\n\n\n\n\n\n\nView offers for an account\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n  \nstruct\n \nxlm_Horizon\n \nhorizon\n;\n\n  \nxlm_horizon_init\n(\n&\nhorizon\n,\n \nXLM_HORIZON_LIVE\n);\n  \n// Or `XLM_HORIZON_TESTNET`\n\n\n  \nstruct\n \nxlm_Response\n \nresponse\n;\n\n  \nxlm_response_init\n(\n&\nresponse\n);\n\n\n  \nstruct\n \nxlm_Request_params\n \nrequest_params\n \n=\n \n{\n\n    \n.\naccount_id\n \n=\n \n\"GB7JKG66CJN3ACX5DX43FOZTTSOI7GZUP547I3BSXIJVUX3NRYUXHE6W\"\n,\n\n  \n};\n\n\n  \nxlm_account_offers\n(\n&\nhorizon\n,\n \n&\nresponse\n,\n \n&\nrequest_params\n);\n  \n// Send request!\n\n\n  \nxlm_JSON\n*\n \njson_root\n \n=\n \njson_parse\n(\nresponse\n.\nraw\n);\n  \n// Parse a raw JSON string!\n\n  \njson_show\n(\njson_root\n);\n\n\n  \njson_free\n(\njson_root\n);\n  \n// Deleting the root takes care of everything\n\n  \nxlm_response_free\n(\n&\nresponse\n);\n\n  \nxlm_horizon_free\n(\n&\nhorizon\n);\n\n  \nm_exit_success\n();\n\n\n}\n\n\n\n\n\n\nView trades for an account\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n  \nstruct\n \nxlm_Horizon\n \nhorizon\n;\n\n  \nxlm_horizon_init\n(\n&\nhorizon\n,\n \nXLM_HORIZON_LIVE\n);\n  \n// Or `XLM_HORIZON_TESTNET`\n\n\n  \nstruct\n \nxlm_Response\n \nresponse\n;\n\n  \nxlm_response_init\n(\n&\nresponse\n);\n\n\n  \nstruct\n \nxlm_Request_params\n \nrequest_params\n \n=\n \n{\n\n    \n.\naccount_id\n \n=\n \n\"GB7JKG66CJN3ACX5DX43FOZTTSOI7GZUP547I3BSXIJVUX3NRYUXHE6W\"\n,\n\n  \n};\n\n\n  \nxlm_account_trades\n(\n&\nhorizon\n,\n \n&\nresponse\n,\n \n&\nrequest_params\n);\n  \n// Send request!\n\n\n  \nxlm_JSON\n*\n \njson_root\n \n=\n \njson_parse\n(\nresponse\n.\nraw\n);\n  \n// Parse a raw JSON string!\n\n  \njson_show\n(\njson_root\n);\n\n\n  \njson_free\n(\njson_root\n);\n  \n// Deleting the root takes care of everything\n\n  \nxlm_response_free\n(\n&\nresponse\n);\n\n  \nxlm_horizon_free\n(\n&\nhorizon\n);\n\n  \nm_exit_success\n();\n\n\n}\n\n\n\n\n\n\n\n\nDebug a request\n\u00b6\n\n\n#include\n \n\"stellar_sdk.h\"\n\n\n\nint\n \nmain\n(){\n\n  \nstruct\n \nxlm_Horizon\n \nhorizon\n;\n\n  \nxlm_horizon_init\n(\n&\nhorizon\n,\n \nXLM_HORIZON_LIVE\n);\n  \n// Or `XLM_HORIZON_TESTNET`\n\n\n  \nstruct\n \nxlm_Response\n \nresponse\n;\n\n  \nxlm_response_init\n(\n&\nresponse\n);\n\n\n  \nstruct\n \nxlm_Request_params\n \nrequest_params\n \n=\n \n{\n\n    \n.\ncursor\n \n=\n \n60496199207092224\n,\n\n    \n.\norder\n \n=\n \n\"desc\"\n,\n\n    \n.\nlimit\n \n=\n \n2\n,\n\n  \n};\n\n\n  \n// Assemble and send request!\n\n  \nxlm_ledgers\n(\n&\nhorizon\n,\n \n&\nresponse\n,\n \n&\nrequest_params\n);\n\n\n  \n// Show the assembled request\n\n  \nxlm_show_request\n(\n&\nresponse\n);\n\n\n  \n// Show the response, as a raw string\n\n  \nxlm_show_raw\n(\n&\nresponse\n);\n\n\n  \nxlm_response_free\n(\n&\nresponse\n);\n\n  \nxlm_horizon_free\n(\n&\nhorizon\n);\n\n  \nm_exit_success\n();\n\n\n}\n\n\n\n\n\n\n\n\nGet XLM/CNY price data\n\u00b6\n\n\nFind the \nvalue-at-risk (VaR)\n for the XLM/CNY price\n\u00b6\n\n\nForecast the volatility of the XLM/CNY price with a \nGARCH(1,1)\n model\n\u00b6\n\n\nDo a \nlinear regression\n on XLM/CNY price\n\u00b6\n\n\nPrice a purported \nEuropean call option\n on XLM under the \nBlack-Scholes pricing model\n\u00b6\n\n\nCompute the implied volatility of a purported \nEuropean call option\n on XLM under the \nBlack-Scholes pricing model\n\u00b6",
+            "title": "Examples"
+        },
+        {
+            "location": "/examples/#examples",
+            "text": "",
+            "title": "Examples"
+        },
+        {
+            "location": "/examples/#high-level-synchronous-api",
+            "text": "",
+            "title": "High-level (synchronous) API"
+        },
+        {
+            "location": "/examples/#view-account-balances-all-assets",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){ \n   struct   xlm_Horizon   horizon ; \n   xlm_horizon_init ( & horizon ,   XLM_HORIZON_LIVE );    // Or `XLM_HORIZON_TESTNET` \n\n   struct   xlm_Response   response ; \n   xlm_response_init ( & response ); \n\n   struct   xlm_Request_params   request_params   =   { \n     . account_id   =   \"GB7JKG66CJN3ACX5DX43FOZTTSOI7GZUP547I3BSXIJVUX3NRYUXHE6W\" , \n   }; \n\n   xlm_account ( & horizon ,   & response ,   & request_params );    // Send request! \n\n   xlm_JSON *   json_root   =   json_parse ( response . raw );    // Parse a raw JSON string! \n   xlm_JSON *   json_balances   =   json_get ( json_root ,   \"balances\" ); \n   json_show ( json_balances ); \n\n   m_sep (); \n   for ( uint   i = 0 ;   i < json_get_array_len ( json_balances );   ++ i ){ \n     xlm_JSON *   json_balance_item   =   json_get_array_item ( json_balances ,   i ); \n     xlm_JSON *   json_balance   =   json_get ( json_balance_item ,   \"balance\" ); \n     xlm_JSON *   json_asset_type   =   json_get ( json_balance_item ,   \"asset_type\" ); \n     printf ( \"%s  %s \\n \" ,   json_asset_type -> valuestring ,   json_balance -> valuestring ); \n   } \n\n   json_free ( json_root );    // Deleting the root takes care of everything \n   xlm_response_free ( & response ); \n   xlm_horizon_free ( & horizon ); \n   m_exit_success ();  }",
+            "title": "View account balances (all assets)"
+        },
+        {
+            "location": "/examples/#send-a-payment-with-an-account",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){ \n   // 0. Build the transaction \n\n   // 1. Sign the transaction with the secret seed \n\n   // 2. Submit the transaction to the network  }",
+            "title": "Send a payment with an account"
+        },
+        {
+            "location": "/examples/#view-all-ledgers",
+            "text": "",
+            "title": "View all ledgers"
+        },
+        {
+            "location": "/examples/#show-the-first-ledger-in-the-returned-records",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){ \n   // Create a Horizon object, to hold server data \n   struct   xlm_Horizon   horizon ; \n   xlm_horizon_init ( & horizon ,   XLM_HORIZON_LIVE );    // Or `XLM_HORIZON_TESTNET` \n\n   // Create a Response object, to hold the response and other data \n   struct   xlm_Response   response ; \n   xlm_response_init ( & response ); \n\n   // Create a Request_params object, to specify request parameters. \n   // You may also use the default constructor `XLM_REQUEST_PARAMS_DEFAULT` \n   struct   xlm_Request_params   request_params   =   { \n     . cursor   =   60496199207092224 , \n     . order   =   \"desc\" , \n     . limit   =   2 , \n   }; \n\n   xlm_ledgers ( & horizon ,   & response ,   & request_params );    // Send request! \n\n   // --------------------- \n   xlm_JSON *   json_root   =   json_parse ( response . raw );    // Parse a raw JSON string! \n   xlm_JSON *   json_embedded   =   json_get ( json_root ,   \"_embedded\" ); \n   xlm_JSON *   json_records   =   json_get ( json_embedded ,   \"records\" ); \n   json_show ( json_records ); \n\n   // Grab the first ledger from the records! \n   xlm_JSON *   json_record0   =   json_get_array_item ( json_records ,   0 ); \n   json_show ( json_record0 ); \n\n   // From the ledger JSON, initialize a proper C ledger object \n   struct   xlm_Ledger   ledger0 ; \n   xlm_ledger_from_json ( & ledger0 ,   json_record0 ); \n   m_sep (); \n   xlm_ledger_show ( & ledger0 );    // Show the ledger object from its internal format \n\n   // --------------------- \n   // Clean up \n   json_free ( json_root );    // Deleting the root takes care of everything \n   xlm_response_free ( & response ); \n   xlm_horizon_free ( & horizon ); \n   m_exit_success ();  }",
+            "title": "Show the first ledger in the (returned) records"
+        },
+        {
+            "location": "/examples/#show-all-ledgers-in-the-returned-records",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){ \n   struct   xlm_Horizon   horizon ; \n   xlm_horizon_init ( & horizon ,   XLM_HORIZON_LIVE );    // Or `XLM_HORIZON_TESTNET` \n\n   struct   xlm_Response   response ; \n   xlm_response_init ( & response ); \n\n   struct   xlm_Request_params   request_params   =   { \n     . cursor   =   60496199207092224 , \n     . order   =   \"desc\" , \n     . limit   =   4 , \n   }; \n\n   xlm_ledgers ( & horizon ,   & response ,   & request_params );    // Send request! \n\n   xlm_JSON *   json_root   =   json_parse ( response . raw );    // Parse a raw JSON string! \n   xlm_JSON *   json_embedded   =   json_get ( json_root ,   \"_embedded\" ); \n   xlm_JSON *   json_records   =   json_get ( json_embedded ,   \"records\" ); \n   json_show ( json_records ); \n\n   uint   n_records   =   json_get_array_len ( json_records ); \n\n   m_sep (); \n   for ( uint   i = 0 ;   i < n_records ;   ++ i ){    // Grab all ledgers from the records! \n     xlm_JSON *   json_record   =   json_get_array_item ( json_records ,   i ); \n     struct   xlm_Ledger   ledger ; \n     xlm_ledger_from_json ( & ledger ,   json_record ); \n     puts ( \"\" );    xlm_ledger_show ( & ledger );    // Show the ledger object from its internal format \n   } \n\n   json_free ( json_root );    // Deleting the root takes care of everything \n   xlm_response_free ( & response ); \n   xlm_horizon_free ( & horizon ); \n   m_exit_success ();  }",
+            "title": "Show all ledgers in the (returned) records"
+        },
+        {
+            "location": "/examples/#view-a-single-ledger",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){ \n   struct   xlm_Horizon   horizon ; \n   xlm_horizon_init ( & horizon ,   XLM_HORIZON_LIVE );    // Or `XLM_HORIZON_TESTNET` \n\n   struct   xlm_Response   response ; \n   xlm_response_init ( & response ); \n\n   struct   xlm_Request_params   request_params   =   { \n     . cursor   =   14085369 , \n   }; \n\n   xlm_ledger ( & horizon ,   & response ,   & request_params ); \n\n   xlm_JSON *   json_root   =   json_parse ( response . raw ); \n\n   struct   xlm_Ledger   ledger ; \n   xlm_ledger_from_json ( & ledger ,   json_root ); \n   m_sep ();    xlm_ledger_show ( & ledger ); \n\n   json_free ( json_root ); \n   xlm_response_free ( & response ); \n   xlm_horizon_free ( & horizon ); \n   m_exit_success ();  }",
+            "title": "View a single ledger"
+        },
+        {
+            "location": "/examples/#view-transactions-for-a-ledger",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){ \n   struct   xlm_Horizon   horizon ; \n   xlm_horizon_init ( & horizon ,   XLM_HORIZON_LIVE );    // Or `XLM_HORIZON_TESTNET` \n\n   struct   xlm_Response   response ; \n   xlm_response_init ( & response ); \n\n   struct   xlm_Request_params   request_params   =   { \n     . cursor   =   14085369 , \n   }; \n\n   xlm_ledger_transactions ( & horizon ,   & response ,   & request_params ); \n\n   xlm_JSON *   json_root   =   json_parse ( response . raw );    // Parse a raw JSON string! \n   json_show ( json_root ); \n\n   json_free ( json_root ); \n   xlm_response_free ( & response ); \n   xlm_horizon_free ( & horizon ); \n   m_exit_success ();  }",
+            "title": "View transactions for a ledger"
+        },
+        {
+            "location": "/examples/#view-operations-for-a-ledger",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){ \n   struct   xlm_Horizon   horizon ; \n   xlm_horizon_init ( & horizon ,   XLM_HORIZON_LIVE );    // Or `XLM_HORIZON_TESTNET` \n\n   struct   xlm_Response   response ; \n   xlm_response_init ( & response ); \n\n   struct   xlm_Request_params   request_params   =   { \n     . cursor   =   14085369 , \n   }; \n\n   xlm_ledger_operations ( & horizon ,   & response ,   & request_params ); \n\n   xlm_JSON *   json_root   =   json_parse ( response . raw );    // Parse a raw JSON string! \n   json_show ( json_root ); \n\n   json_free ( json_root ); \n   xlm_response_free ( & response ); \n   xlm_horizon_free ( & horizon ); \n   m_exit_success ();  }",
+            "title": "View operations for a ledger"
+        },
+        {
+            "location": "/examples/#view-effects-for-a-ledger",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){ \n   struct   xlm_Horizon   horizon ; \n   xlm_horizon_init ( & horizon ,   XLM_HORIZON_LIVE );    // Or `XLM_HORIZON_TESTNET` \n\n   struct   xlm_Response   response ; \n   xlm_response_init ( & response ); \n\n   struct   xlm_Request_params   request_params   =   { \n     . cursor   =   14085369 , \n   }; \n\n   xlm_ledger_effects ( & horizon ,   & response ,   & request_params ); \n\n   xlm_JSON *   json_root   =   json_parse ( response . raw );    // Parse a raw JSON string! \n   json_show ( json_root ); \n\n   json_free ( json_root ); \n   xlm_response_free ( & response ); \n   xlm_horizon_free ( & horizon ); \n   m_exit_success ();  }",
+            "title": "View effects for a ledger"
+        },
+        {
+            "location": "/examples/#view-payments-for-a-ledger",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){ \n   struct   xlm_Horizon   horizon ; \n   xlm_horizon_init ( & horizon ,   XLM_HORIZON_LIVE );    // Or `XLM_HORIZON_TESTNET` \n\n   struct   xlm_Response   response ; \n   xlm_response_init ( & response ); \n\n   struct   xlm_Request_params   request_params   =   { \n     . cursor   =   14085369 , \n   }; \n\n   xlm_ledger_payments ( & horizon ,   & response ,   & request_params ); \n\n   xlm_JSON *   json_root   =   json_parse ( response . raw );    // Parse a raw JSON string! \n   json_show ( json_root ); \n\n   json_free ( json_root ); \n   xlm_response_free ( & response ); \n   xlm_horizon_free ( & horizon ); \n   m_exit_success ();  }",
+            "title": "View payments for a ledger"
+        },
+        {
+            "location": "/examples/#view-all-transactions",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){ \n   struct   xlm_Horizon   horizon ; \n   xlm_horizon_init ( & horizon ,   XLM_HORIZON_LIVE );    // Or `XLM_HORIZON_TESTNET` \n\n   struct   xlm_Response   response ; \n   xlm_response_init ( & response ); \n\n   struct   xlm_Request_params   request_params   =   { \n     . cursor   =   60496199207092224 , \n     . order   =   \"desc\" , \n     . limit   =   2 , \n   }; \n\n   xlm_transactions ( & horizon ,   & response ,   & request_params );    // Send request! \n\n   xlm_JSON *   json_root   =   json_parse ( response . raw );    // Parse a raw JSON string! \n   xlm_JSON *   json_embedded   =   json_get ( json_root ,   \"_embedded\" ); \n   xlm_JSON *   json_records   =   json_get ( json_embedded ,   \"records\" ); \n   json_show ( json_records ); \n\n   uint   n_records   =   json_get_array_len ( json_records ); \n\n   m_sep (); \n   for ( uint   i = 0 ;   i < n_records ;   ++ i ){ \n     xlm_JSON *   json_record   =   json_get_array_item ( json_records ,   i ); \n     xlm_JSON *   json_hash   =   json_get ( json_record ,   \"hash\" ); \n     xlm_JSON *   json_ledger   =   json_get ( json_record ,   \"ledger\" ); \n     xlm_JSON *   json_created_at   =   json_get ( json_record ,   \"created_at\" ); \n     m_puts (); \n     printf ( \"%24s  \" ,   \"hash\" );    json_show ( json_hash ); \n     printf ( \"%24s  \" ,   \"ledger\" );    json_show ( json_ledger ); \n     printf ( \"%24s  \" ,   \"created_at\" );    json_show ( json_created_at ); \n   } \n\n   json_free ( json_root );    // Deleting the root takes care of everything \n   xlm_response_free ( & response ); \n   xlm_horizon_free ( & horizon ); \n   m_exit_success ();  }",
+            "title": "View all transactions"
+        },
+        {
+            "location": "/examples/#view-a-single-transaction",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){ \n   struct   xlm_Horizon   horizon ; \n   xlm_horizon_init ( & horizon ,   XLM_HORIZON_LIVE );    // Or `XLM_HORIZON_TESTNET` \n\n   struct   xlm_Response   response ; \n   xlm_response_init ( & response ); \n\n   struct   xlm_Request_params   request_params   =   { \n     . id   =   \"70dbba321418c3e21f6c05216ed3dadbfc1413672cc2a366a81ea4fbd2308c16\" , \n   }; \n\n   xlm_transaction ( & horizon ,   & response ,   & request_params );    // Send request! \n\n   xlm_JSON *   json_root   =   json_parse ( response . raw );    // Parse a raw JSON string! \n   json_show ( json_root ); \n\n   json_free ( json_root );    // Deleting the root takes care of everything \n   xlm_response_free ( & response ); \n   xlm_horizon_free ( & horizon ); \n   m_exit_success ();  }",
+            "title": "View a single transaction"
+        },
+        {
+            "location": "/examples/#view-operations-for-a-transaction",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){ \n   struct   xlm_Horizon   horizon ; \n   xlm_horizon_init ( & horizon ,   XLM_HORIZON_LIVE );    // Or `XLM_HORIZON_TESTNET` \n\n   struct   xlm_Response   response ; \n   xlm_response_init ( & response ); \n\n   struct   xlm_Request_params   request_params   =   { \n     . id   =   \"70dbba321418c3e21f6c05216ed3dadbfc1413672cc2a366a81ea4fbd2308c16\" , \n   }; \n\n   xlm_transaction_operations ( & horizon ,   & response ,   & request_params );    // Send request! \n\n   xlm_JSON *   json_root   =   json_parse ( response . raw );    // Parse a raw JSON string! \n   json_show ( json_root ); \n\n   json_free ( json_root );    // Deleting the root takes care of everything \n   xlm_response_free ( & response ); \n   xlm_horizon_free ( & horizon ); \n   m_exit_success ();  }",
+            "title": "View operations for a transaction"
+        },
+        {
+            "location": "/examples/#view-effects-for-a-transaction",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){ \n   struct   xlm_Horizon   horizon ; \n   xlm_horizon_init ( & horizon ,   XLM_HORIZON_LIVE );    // Or `XLM_HORIZON_TESTNET` \n\n   struct   xlm_Response   response ; \n   xlm_response_init ( & response ); \n\n   struct   xlm_Request_params   request_params   =   { \n     . id   =   \"70dbba321418c3e21f6c05216ed3dadbfc1413672cc2a366a81ea4fbd2308c16\" , \n   }; \n\n   xlm_transaction_effects ( & horizon ,   & response ,   & request_params );    // Send request! \n\n   xlm_JSON *   json_root   =   json_parse ( response . raw );    // Parse a raw JSON string! \n   json_show ( json_root ); \n\n   json_free ( json_root );    // Deleting the root takes care of everything \n   xlm_response_free ( & response ); \n   xlm_horizon_free ( & horizon ); \n   m_exit_success ();  }",
+            "title": "View effects for a transaction"
+        },
+        {
+            "location": "/examples/#view-payments-for-a-transaction",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){ \n   struct   xlm_Horizon   horizon ; \n   xlm_horizon_init ( & horizon ,   XLM_HORIZON_LIVE );    // Or `XLM_HORIZON_TESTNET` \n\n   struct   xlm_Response   response ; \n   xlm_response_init ( & response ); \n\n   struct   xlm_Request_params   request_params   =   { \n     . id   =   \"70dbba321418c3e21f6c05216ed3dadbfc1413672cc2a366a81ea4fbd2308c16\" , \n   }; \n\n   xlm_transaction_payments ( & horizon ,   & response ,   & request_params );    // Send request! \n\n   xlm_JSON *   json_root   =   json_parse ( response . raw );    // Parse a raw JSON string! \n   json_show ( json_root ); \n\n   json_free ( json_root );    // Deleting the root takes care of everything \n   xlm_response_free ( & response ); \n   xlm_horizon_free ( & horizon ); \n   m_exit_success ();  }",
+            "title": "View payments for a transaction"
+        },
+        {
+            "location": "/examples/#view-all-operations",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){ \n   struct   xlm_Horizon   horizon ; \n   xlm_horizon_init ( & horizon ,   XLM_HORIZON_LIVE );    // Or `XLM_HORIZON_TESTNET` \n\n   struct   xlm_Response   response ; \n   xlm_response_init ( & response ); \n\n   struct   xlm_Request_params   request_params   =   { \n     . cursor   =   60544972855709697 , \n     . order   =   \"desc\" , \n     . limit   =   4 , \n   }; \n\n   xlm_operations ( & horizon ,   & response ,   & request_params );    // Send request! \n\n   xlm_JSON *   json_root   =   json_parse ( response . raw );    // Parse a raw JSON string! \n   json_show ( json_root ); \n\n   json_free ( json_root );    // Deleting the root takes care of everything \n   xlm_response_free ( & response ); \n   xlm_horizon_free ( & horizon ); \n   m_exit_success ();  }",
+            "title": "View all operations"
+        },
+        {
+            "location": "/examples/#view-a-single-operation",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){ \n   struct   xlm_Horizon   horizon ; \n   xlm_horizon_init ( & horizon ,   XLM_HORIZON_LIVE );    // Or `XLM_HORIZON_TESTNET` \n\n   struct   xlm_Response   response ; \n   xlm_response_init ( & response ); \n\n   struct   xlm_Request_params   request_params   =   { \n     . id   =   \"60544972855709697\" , \n   }; \n\n   xlm_operation ( & horizon ,   & response ,   & request_params );    // Send request! \n\n   xlm_JSON *   json_root   =   json_parse ( response . raw );    // Parse a raw JSON string! \n   json_show ( json_root ); \n\n   json_free ( json_root );    // Deleting the root takes care of everything \n   xlm_response_free ( & response ); \n   xlm_horizon_free ( & horizon ); \n   m_exit_success ();  }",
+            "title": "View a single operation"
+        },
+        {
+            "location": "/examples/#view-effects-for-an-operation",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){ \n   struct   xlm_Horizon   horizon ; \n   xlm_horizon_init ( & horizon ,   XLM_HORIZON_LIVE );    // Or `XLM_HORIZON_TESTNET` \n\n   struct   xlm_Response   response ; \n   xlm_response_init ( & response ); \n\n   struct   xlm_Request_params   request_params   =   { \n     . id   =   \"60544972855709697\" , \n   }; \n\n   xlm_operation_effects ( & horizon ,   & response ,   & request_params );    // Send request! \n\n   xlm_JSON *   json_root   =   json_parse ( response . raw );    // Parse a raw JSON string! \n   json_show ( json_root ); \n\n   json_free ( json_root );    // Deleting the root takes care of everything \n   xlm_response_free ( & response ); \n   xlm_horizon_free ( & horizon ); \n   m_exit_success ();  }",
+            "title": "View effects for an operation"
+        },
+        {
+            "location": "/examples/#view-all-effects",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){ \n   struct   xlm_Horizon   horizon ; \n   xlm_horizon_init ( & horizon ,   XLM_HORIZON_LIVE );    // Or `XLM_HORIZON_TESTNET` \n\n   struct   xlm_Response   response ; \n   xlm_response_init ( & response ); \n\n   struct   xlm_Request_params   request_params   =   { \n     . cursor   =   60544972855709697 , \n     . order   =   \"desc\" , \n     . limit   =   4 , \n   }; \n\n   xlm_effects ( & horizon ,   & response ,   & request_params );    // Send request! \n\n   xlm_JSON *   json_root   =   json_parse ( response . raw );    // Parse a raw JSON string! \n   json_show ( json_root ); \n\n   json_free ( json_root );    // Deleting the root takes care of everything \n   xlm_response_free ( & response ); \n   xlm_horizon_free ( & horizon ); \n   m_exit_success ();  }",
+            "title": "View all effects"
+        },
+        {
+            "location": "/examples/#view-all-payments",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){ \n   struct   xlm_Horizon   horizon ; \n   xlm_horizon_init ( & horizon ,   XLM_HORIZON_LIVE );    // Or `XLM_HORIZON_TESTNET` \n\n   struct   xlm_Response   response ; \n   xlm_response_init ( & response ); \n\n   struct   xlm_Request_params   request_params   =   { \n     . cursor   =   60544972855709697 , \n     . order   =   \"desc\" , \n     . limit   =   4 , \n   }; \n\n   xlm_payments ( & horizon ,   & response ,   & request_params );    // Send request! \n\n   xlm_JSON *   json_root   =   json_parse ( response . raw );    // Parse a raw JSON string! \n   json_show ( json_root ); \n\n   json_free ( json_root );    // Deleting the root takes care of everything \n   xlm_response_free ( & response ); \n   xlm_horizon_free ( & horizon ); \n   m_exit_success ();  }",
+            "title": "View all payments"
+        },
+        {
+            "location": "/examples/#view-all-trades",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){ \n   struct   xlm_Horizon   horizon ; \n   xlm_horizon_init ( & horizon ,   XLM_HORIZON_LIVE );    // Or `XLM_HORIZON_TESTNET` \n\n   struct   xlm_Response   response ; \n   xlm_response_init ( & response ); \n\n   struct   xlm_Request_params   request_params   =   { \n     . cursor   =   60544972855709697 , \n     . order   =   \"desc\" , \n     . limit   =   4 , \n   }; \n\n   xlm_orderbook_trades ( & horizon ,   & response ,   & request_params );    // Send request! \n\n   xlm_JSON *   json_root   =   json_parse ( response . raw );    // Parse a raw JSON string! \n   json_show ( json_root ); \n\n   json_free ( json_root );    // Deleting the root takes care of everything \n   xlm_response_free ( & response ); \n   xlm_horizon_free ( & horizon ); \n   m_exit_success ();  }",
+            "title": "View all trades"
+        },
+        {
+            "location": "/examples/#view-trades-for-an-orderbook",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){  }",
+            "title": "View trades for an orderbook"
+        },
+        {
+            "location": "/examples/#view-trades-for-an-asset",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){  }",
+            "title": "View trades for an asset"
+        },
+        {
+            "location": "/examples/#view-trades-for-an-issuer",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){  }",
+            "title": "View trades for an issuer"
+        },
+        {
+            "location": "/examples/#view-metrics",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){ \n   struct   xlm_Horizon   horizon ; \n   xlm_horizon_init ( & horizon ,   XLM_HORIZON_LIVE );    // Or `XLM_HORIZON_TESTNET` \n\n   struct   xlm_Response   response ; \n   xlm_response_init ( & response ); \n\n   struct   xlm_Request_params   request_params ; \n\n   xlm_metrics ( & horizon ,   & response ,   & request_params );    // Send request! \n\n   xlm_JSON *   json_root   =   json_parse ( response . raw );    // Parse a raw JSON string! \n   json_show ( json_root ); \n\n   json_free ( json_root );    // Deleting the root takes care of everything \n   xlm_response_free ( & response ); \n   xlm_horizon_free ( & horizon ); \n   m_exit_success ();  }",
+            "title": "View metrics"
+        },
+        {
+            "location": "/examples/#view-transactions-for-an-account",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){ \n   struct   xlm_Horizon   horizon ; \n   xlm_horizon_init ( & horizon ,   XLM_HORIZON_LIVE );    // Or `XLM_HORIZON_TESTNET` \n\n   struct   xlm_Response   response ; \n   xlm_response_init ( & response ); \n\n   struct   xlm_Request_params   request_params   =   { \n     . account_id   =   \"GB7JKG66CJN3ACX5DX43FOZTTSOI7GZUP547I3BSXIJVUX3NRYUXHE6W\" , \n   }; \n\n   xlm_account_transactions ( & horizon ,   & response ,   & request_params );    // Send request! \n\n   xlm_JSON *   json_root   =   json_parse ( response . raw );    // Parse a raw JSON string! \n   json_show ( json_root ); \n\n   json_free ( json_root );    // Deleting the root takes care of everything \n   xlm_response_free ( & response ); \n   xlm_horizon_free ( & horizon ); \n   m_exit_success ();  }",
+            "title": "View transactions for an account"
+        },
+        {
+            "location": "/examples/#view-operations-for-an-account",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){ \n   struct   xlm_Horizon   horizon ; \n   xlm_horizon_init ( & horizon ,   XLM_HORIZON_LIVE );    // Or `XLM_HORIZON_TESTNET` \n\n   struct   xlm_Response   response ; \n   xlm_response_init ( & response ); \n\n   struct   xlm_Request_params   request_params   =   { \n     . account_id   =   \"GB7JKG66CJN3ACX5DX43FOZTTSOI7GZUP547I3BSXIJVUX3NRYUXHE6W\" , \n   }; \n\n   xlm_account_operations ( & horizon ,   & response ,   & request_params );    // Send request! \n\n   xlm_JSON *   json_root   =   json_parse ( response . raw );    // Parse a raw JSON string! \n   json_show ( json_root ); \n\n   json_free ( json_root );    // Deleting the root takes care of everything \n   xlm_response_free ( & response ); \n   xlm_horizon_free ( & horizon ); \n   m_exit_success ();  }",
+            "title": "View operations for an account"
+        },
+        {
+            "location": "/examples/#view-effects-for-an-account",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){ \n   struct   xlm_Horizon   horizon ; \n   xlm_horizon_init ( & horizon ,   XLM_HORIZON_LIVE );    // Or `XLM_HORIZON_TESTNET` \n\n   struct   xlm_Response   response ; \n   xlm_response_init ( & response ); \n\n   struct   xlm_Request_params   request_params   =   { \n     . account_id   =   \"GB7JKG66CJN3ACX5DX43FOZTTSOI7GZUP547I3BSXIJVUX3NRYUXHE6W\" , \n   }; \n\n   xlm_account_effects ( & horizon ,   & response ,   & request_params );    // Send request! \n\n   xlm_JSON *   json_root   =   json_parse ( response . raw );    // Parse a raw JSON string! \n   json_show ( json_root ); \n\n   json_free ( json_root );    // Deleting the root takes care of everything \n   xlm_response_free ( & response ); \n   xlm_horizon_free ( & horizon ); \n   m_exit_success ();  }",
+            "title": "View effects for an account"
+        },
+        {
+            "location": "/examples/#view-payments-for-an-account",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){ \n   struct   xlm_Horizon   horizon ; \n   xlm_horizon_init ( & horizon ,   XLM_HORIZON_LIVE );    // Or `XLM_HORIZON_TESTNET` \n\n   struct   xlm_Response   response ; \n   xlm_response_init ( & response ); \n\n   struct   xlm_Request_params   request_params   =   { \n     . account_id   =   \"GB7JKG66CJN3ACX5DX43FOZTTSOI7GZUP547I3BSXIJVUX3NRYUXHE6W\" , \n   }; \n\n   xlm_account_payments ( & horizon ,   & response ,   & request_params );    // Send request! \n\n   xlm_JSON *   json_root   =   json_parse ( response . raw );    // Parse a raw JSON string! \n   json_show ( json_root ); \n\n   json_free ( json_root );    // Deleting the root takes care of everything \n   xlm_response_free ( & response ); \n   xlm_horizon_free ( & horizon ); \n   m_exit_success ();  }",
+            "title": "View payments for an account"
+        },
+        {
+            "location": "/examples/#view-offers-for-an-account",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){ \n   struct   xlm_Horizon   horizon ; \n   xlm_horizon_init ( & horizon ,   XLM_HORIZON_LIVE );    // Or `XLM_HORIZON_TESTNET` \n\n   struct   xlm_Response   response ; \n   xlm_response_init ( & response ); \n\n   struct   xlm_Request_params   request_params   =   { \n     . account_id   =   \"GB7JKG66CJN3ACX5DX43FOZTTSOI7GZUP547I3BSXIJVUX3NRYUXHE6W\" , \n   }; \n\n   xlm_account_offers ( & horizon ,   & response ,   & request_params );    // Send request! \n\n   xlm_JSON *   json_root   =   json_parse ( response . raw );    // Parse a raw JSON string! \n   json_show ( json_root ); \n\n   json_free ( json_root );    // Deleting the root takes care of everything \n   xlm_response_free ( & response ); \n   xlm_horizon_free ( & horizon ); \n   m_exit_success ();  }",
+            "title": "View offers for an account"
+        },
+        {
+            "location": "/examples/#view-trades-for-an-account",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){ \n   struct   xlm_Horizon   horizon ; \n   xlm_horizon_init ( & horizon ,   XLM_HORIZON_LIVE );    // Or `XLM_HORIZON_TESTNET` \n\n   struct   xlm_Response   response ; \n   xlm_response_init ( & response ); \n\n   struct   xlm_Request_params   request_params   =   { \n     . account_id   =   \"GB7JKG66CJN3ACX5DX43FOZTTSOI7GZUP547I3BSXIJVUX3NRYUXHE6W\" , \n   }; \n\n   xlm_account_trades ( & horizon ,   & response ,   & request_params );    // Send request! \n\n   xlm_JSON *   json_root   =   json_parse ( response . raw );    // Parse a raw JSON string! \n   json_show ( json_root ); \n\n   json_free ( json_root );    // Deleting the root takes care of everything \n   xlm_response_free ( & response ); \n   xlm_horizon_free ( & horizon ); \n   m_exit_success ();  }",
+            "title": "View trades for an account"
+        },
+        {
+            "location": "/examples/#debug-a-request",
+            "text": "#include   \"stellar_sdk.h\"  int   main (){ \n   struct   xlm_Horizon   horizon ; \n   xlm_horizon_init ( & horizon ,   XLM_HORIZON_LIVE );    // Or `XLM_HORIZON_TESTNET` \n\n   struct   xlm_Response   response ; \n   xlm_response_init ( & response ); \n\n   struct   xlm_Request_params   request_params   =   { \n     . cursor   =   60496199207092224 , \n     . order   =   \"desc\" , \n     . limit   =   2 , \n   }; \n\n   // Assemble and send request! \n   xlm_ledgers ( & horizon ,   & response ,   & request_params ); \n\n   // Show the assembled request \n   xlm_show_request ( & response ); \n\n   // Show the response, as a raw string \n   xlm_show_raw ( & response ); \n\n   xlm_response_free ( & response ); \n   xlm_horizon_free ( & horizon ); \n   m_exit_success ();  }",
+            "title": "Debug a request"
+        },
+        {
+            "location": "/examples/#get-xlmcny-price-data",
+            "text": "",
+            "title": "Get XLM/CNY price data"
+        },
+        {
+            "location": "/examples/#find-the-value-at-risk-var-for-the-xlmcny-price",
+            "text": "",
+            "title": "Find the value-at-risk (VaR) for the XLM/CNY price"
+        },
+        {
+            "location": "/examples/#forecast-the-volatility-of-the-xlmcny-price-with-a-garch11-model",
+            "text": "",
+            "title": "Forecast the volatility of the XLM/CNY price with a GARCH(1,1) model"
+        },
+        {
+            "location": "/examples/#do-a-linear-regression-on-xlmcny-price",
+            "text": "",
+            "title": "Do a linear regression on XLM/CNY price"
+        },
+        {
+            "location": "/examples/#price-a-purported-european-call-option-on-xlm-under-the-black-scholes-pricing-model",
+            "text": "",
+            "title": "Price a purported European call option on XLM under the Black-Scholes pricing model"
+        },
+        {
+            "location": "/examples/#compute-the-implied-volatility-of-a-purported-european-call-option-on-xlm-under-the-black-scholes-pricing-model",
+            "text": "",
+            "title": "Compute the implied volatility of a purported European call option on XLM under the Black-Scholes pricing model"
+        },
+        {
+            "location": "/data_structures/",
+            "text": "Data structures\n\u00b6\n\n\nxlm_Horizon\n\u00b6\n\n\nstruct\n \nxlm_Horizon\n{\n\n\nxlm_str\n \nroot_url\n;\n\n\n};\n\n\n\nvoid\n \nxlm_horizon_init\n(\nstruct\n \nxlm_Horizon\n*\n \nhorizon\n,\n \nconst\n \nchar\n*\n \nroot\n){\n\n\n}\n\n\n\nvoid\n \nxlm_horizon_free\n(\nstruct\n \nxlm_Horizon\n*\n \nhorizon\n){\n\n\n}\n\n\n\n\n\n\nxlm_Response\n\u00b6\n\n\nstruct\n \nxlm_Response\n{\n\n\nCURL\n*\n \ncurl\n;\n\n\nCURLcode\n \ncurl_code\n;\n\n\nxlm_str\n \nraw\n;\n\n\nxlm_str\n \nrequest_url\n;\n\n\n};\n\n\n\nvoid\n \nxlm_response_init\n(\nstruct\n \nxlm_Response\n*\n \nresponse\n){\n\n\n}\n\n\n\nvoid\n \nxlm_response_free\n(\nstruct\n \nxlm_Response\n*\n \nresponse\n){\n\n\n}\n\n\n\n// Print a request to console!\n\n\nvoid\n \nxlm_show_request\n(\nstruct\n \nxlm_Response\n*\n \nresponse\n){\n\n\n}\n\n\n\n// Print a response to console, as a raw string!\n\n\nvoid\n \nxlm_show_raw\n(\nstruct\n \nxlm_Response\n*\n \nresponse\n){\n\n\n}\n \n\n\n\n\n\nxlm_Request_params\n\u00b6\n\n\nstruct\n \nxlm_Request_params\n{\n\n\n// Generic parameters\n\n\nint64\n \ncursor\n;\n\n\nchar\n  \norder\n[\n8\n];\n\n\nint64\n \nlimit\n;\n\n\n\nchar\n \nid\n[\n256\n];\n\n\n\n// Parameters for accounts\n\n\nchar\n  \naccount_id\n[\n64\n];\n\n\n\n// Parameters for orderbook trades\n\n\nchar\n \nselling_asset_type\n[\n64\n];\n\n\nchar\n \nselling_asset_code\n[\n64\n];\n\n\nchar\n \nselling_asset_issuer\n[\n64\n];\n\n\nchar\n \nbuying_asset_type\n[\n64\n];\n\n\nchar\n \nbuying_asset_code\n[\n64\n];\n\n\nchar\n \nbuying_asset_issuer\n[\n64\n];\n\n\n};",
+            "title": "Data structures"
+        },
+        {
+            "location": "/data_structures/#data-structures",
+            "text": "",
+            "title": "Data structures"
+        },
+        {
+            "location": "/data_structures/#xlm_horizon",
+            "text": "struct   xlm_Horizon {  xlm_str   root_url ;  };  void   xlm_horizon_init ( struct   xlm_Horizon *   horizon ,   const   char *   root ){  }  void   xlm_horizon_free ( struct   xlm_Horizon *   horizon ){  }",
+            "title": "xlm_Horizon"
+        },
+        {
+            "location": "/data_structures/#xlm_response",
+            "text": "struct   xlm_Response {  CURL *   curl ;  CURLcode   curl_code ;  xlm_str   raw ;  xlm_str   request_url ;  };  void   xlm_response_init ( struct   xlm_Response *   response ){  }  void   xlm_response_free ( struct   xlm_Response *   response ){  }  // Print a request to console!  void   xlm_show_request ( struct   xlm_Response *   response ){  }  // Print a response to console, as a raw string!  void   xlm_show_raw ( struct   xlm_Response *   response ){  }",
+            "title": "xlm_Response"
+        },
+        {
+            "location": "/data_structures/#xlm_request_params",
+            "text": "struct   xlm_Request_params {  // Generic parameters  int64   cursor ;  char    order [ 8 ];  int64   limit ;  char   id [ 256 ];  // Parameters for accounts  char    account_id [ 64 ];  // Parameters for orderbook trades  char   selling_asset_type [ 64 ];  char   selling_asset_code [ 64 ];  char   selling_asset_issuer [ 64 ];  char   buying_asset_type [ 64 ];  char   buying_asset_code [ 64 ];  char   buying_asset_issuer [ 64 ];  };",
+            "title": "xlm_Request_params"
+        },
+        {
+            "location": "/functions/",
+            "text": "Functions\n\u00b6\n\n\nxlm_account()\n\u00b6\n\n\nGet account general data.\n\n\nvoid xlm_account(\n  struct xlm_Horizon*,\n  struct xlm_Response*,\n  struct xlm_Request_params*\n)\n\n\n\n\n\nxlm_account_transactions()\n\u00b6\n\n\nGet account transactions.\n\n\nvoid xlm_account_transactions(struct xlm_Horizon*, struct xlm_Response*, struct xlm_Request_params*);\n\n\n\n\n\nxlm_account_operations()\n\u00b6\n\n\nGet account operations.\n\n\nvoid xlm_account_operations(struct xlm_Horizon*, struct xlm_Response*, struct xlm_Request_params*);\n\n\n\n\n\nxlm_account_effects()\n\u00b6\n\n\nGet account effects.\n\n\nvoid xlm_account_effects(struct xlm_Horizon*, struct xlm_Response*, struct xlm_Request_params*);\n\n\n\n\n\nxlm_account_payments()\n\u00b6\n\n\nGet account payments.\n\n\nvoid xlm_account_payments(struct xlm_Horizon*, struct xlm_Response*, struct xlm_Request_params*);\n\n\n\n\n\nxlm_account_offers()\n\u00b6\n\n\nGet account offers.\n\n\nvoid xlm_account_offers(struct xlm_Horizon*, struct xlm_Response*, struct xlm_Request_params*);\n\n\n\n\n\nxlm_account_trades()\n\u00b6\n\n\nGet account trades.\n\n\nvoid xlm_account_trades(struct xlm_Horizon*, struct xlm_Response*, struct xlm_Request_params*);",
+            "title": "Functions"
+        },
+        {
+            "location": "/functions/#functions",
+            "text": "",
+            "title": "Functions"
+        },
+        {
+            "location": "/functions/#xlm_account",
+            "text": "Get account general data.  void xlm_account(\n  struct xlm_Horizon*,\n  struct xlm_Response*,\n  struct xlm_Request_params*\n)",
+            "title": "xlm_account()"
+        },
+        {
+            "location": "/functions/#xlm_account_transactions",
+            "text": "Get account transactions.  void xlm_account_transactions(struct xlm_Horizon*, struct xlm_Response*, struct xlm_Request_params*);",
+            "title": "xlm_account_transactions()"
+        },
+        {
+            "location": "/functions/#xlm_account_operations",
+            "text": "Get account operations.  void xlm_account_operations(struct xlm_Horizon*, struct xlm_Response*, struct xlm_Request_params*);",
+            "title": "xlm_account_operations()"
+        },
+        {
+            "location": "/functions/#xlm_account_effects",
+            "text": "Get account effects.  void xlm_account_effects(struct xlm_Horizon*, struct xlm_Response*, struct xlm_Request_params*);",
+            "title": "xlm_account_effects()"
+        },
+        {
+            "location": "/functions/#xlm_account_payments",
+            "text": "Get account payments.  void xlm_account_payments(struct xlm_Horizon*, struct xlm_Response*, struct xlm_Request_params*);",
+            "title": "xlm_account_payments()"
+        },
+        {
+            "location": "/functions/#xlm_account_offers",
+            "text": "Get account offers.  void xlm_account_offers(struct xlm_Horizon*, struct xlm_Response*, struct xlm_Request_params*);",
+            "title": "xlm_account_offers()"
+        },
+        {
+            "location": "/functions/#xlm_account_trades",
+            "text": "Get account trades.  void xlm_account_trades(struct xlm_Horizon*, struct xlm_Response*, struct xlm_Request_params*);",
+            "title": "xlm_account_trades()"
+        },
+        {
+            "location": "/glossary/",
+            "text": "Glossary\n\u00b6\n\n\n\n\nStellar\n\u00b6\n\n\nAsset\n\u00b6\n\n\nAn \nasset\n in Stellar is a \nsecurity\n issued by a specific \naccount\n that can be traded in the Stellar exchange.\n\n\nAssets can be \"cashed out\" with the asset issuer for whatever it is that the asset is intended to represent.\n\n\nAccounts that issue assets are informally called \nanchors\n.\nAny account can issue any asset to the network, so you must \ntrust\n an account before you can hold assets it has issued.\n\n\nAn \nasset\n is given by the following data:\n\n\n\n\nthe asset \nissuer\n\n\nthe asset \ntype\n\n\nthe asset \ncode\n.\n\n\n\n\nThe only exception to this rule is the \nnative\n asset of the network, called the \nlumen\n, which only has an asset type: \nnative\n.\n\n\nAnchor\n\u00b6\n\n\nAn \nanchor\n in Stellar is an \naccount\n that issues assets and honors withdrawals for those assets.\n\n\nBy honoring withdrawals, anchors effectively serve as the link between the Stellar network and the physical world.\nThey're the entities that allow you, for instance,\nto hold cows in the Stellar network (which are sequences of zeros and ones) and \"cash them out\" for actual cows (which produce milk).\n\n\nAnchors have total control over:\n\n\n\n\nwhich accounts can hold their assets,\n\n\nwho the holders of their assets can trade those assets with, and\n\n\nwhen the holders can withdraw those assets.\n\n\n\n\nThe notion of an anchor in the Stellar network is a \ngeneralization of the notion of a bank in the physical world\n.\nA traditional bank holds cash and honors withdrawals for cash.\nA Stellar anchor \n\n\nAccount\n\u00b6\n\n\nAn \naccount\n in Stellar is a special kind of entry in the ledger that can hold balances, issue assets, and trade assets.\n\n\nAn account is publicly identified by its \npublic key\n.\n\nControl\n over an account rests with whoever knows the \nsecret seed\n or the \nsecret key\n.\n\n\nExample of a \npublic key\n: \nGAPR4YI2IPPL7OBA6KG24OCQ4N35WHKNJEJIDTFOLNHLJUPDHACRX5AU\n\nExample of a \nsecret seed\n: \nSBUNGVT2C4PHIC446T4QOFZ7LFD5NFXSJ46BIAME25R5DEXP24J765H5\n\n\nSecret seed\n\u00b6\n\n\nThe \nsecret seed\n is a cryptographic object associated to an \naccount\n from the which you can recover both the account's public key and private key.\n\n\nIn particular, this means that whoever knows the secret seed has control over the account.\n\n\n\n\nTrading\n\u00b6\n\n\nAsset\n\u00b6\n\n\nIn trading, an \nasset\n is anything that be bought and sold (ie. \ntraded\n) in a \nmarket\n.\n\n\nMarket\n\u00b6\n\n\nA \nmarket\n is a place (physical or digital) where buyers meet sellers.\n\n\nA \nmarket\n for an \nasset\n \nX\n is a place (physical or digital) where buyers of \nX\n meet sellers of \nX\n.\n\n\nLimit order\n\u00b6\n\n\nA \nlimit order\n is an order to trade at a \ngiven\n price, and it lives in the \norderbook\n until a market order clears it.\n\n\nLimit orders provide liquidity to the market, by exposing themselves to be fulfilled by market orders.\n\n\nMarket order\n\u00b6\n\n\nA \nmarket order\n is an order (to buy or sell) that is to be executed immediately, regardless of price.\n\n\nMarket orders take liquidity away from the market, by fulfilling limit orders.\n\n\nOrderbook\n\u00b6\n\n\nThe \norderbook\n, also called the \nlimit orderbook\n or the book of \nlimit orders\n, is the list of all limit orders (both \nbids\n and \nasks\n).\n\n\nBid\n\u00b6\n\n\nA \nbid offer\n is a \nlimit order\n for \nbuying\n an \nasset\n.\n\n\nA \nbid price\n is the price of a bid offer, typically the lowest one.\n\n\nAsk\n\u00b6\n\n\nAn \nask offer\n is a \nlimit order\n for \nselling\n an \nasset\n.\n\n\nAn \nask price\n is the price of an ask offer, typically the highest one.\n\n\nPrice\n\u00b6\n\n\nIn a \nmarket\n, there's no such thing as \nthe\n price of an asset.\nThere's only the \nbid price\n, the \nask price\n, and the \nlast price\n (which is the price at which the last market order cleared a limit order).\n\n\nThe problem of executing a large market order at the best \naverage price\n given the available orderbook is known to be a \nstochastic control problem\n. This is a problem in the first place because large market orders tend to \nwalk the orderbook\n.\n\n\nWalking the orderbook\n\u00b6\n\n\nIf a \nmarket order\n is larger then the best matching limit order, the market order executes the best limit order first and then the limit orders that come above (or below) it, which have worse prices (for the issuer of the market order) than the best limit order.\n\n\nThis process of clearing worse and worse limit orders with a market order is known as \nwalking the orderbook\n.\n\n\nLiquidity\n\u00b6\n\n\nIntuitively, \nliquidity\n is a measure of how easy/hard it is to trade an asset.\n\n\nThe amount of limit orders in the \norderbook\n is a rough/naive measure of liquidity.\n\n\nMarket depth\n\u00b6\n\n\n\n\nProbability\n\u00b6\n\n\nRandom variable\n\u00b6\n\n\nA \nrandom variable\n is a \nfunction\n from the \nsample space\n to the \nstate space\n.\n\n\nRandom variables are not variables in the sense of high-school algebra, but functions in the sense of calculus.\n\n\nStochastic process\n\u00b6\n\n\nA \nstochastic process\n is a \nfunction\n whose values are \nrandom variables\n.\n\n\nRandom variables\n are to \nstochastic processes\n as \nnumbers\n are to \nfunctions\n.\n\nOne observation/sample of a random variable yields a (single) number.\n\nOne observation/sample of a random process yields a (single) function.\n\n\nCopula\n\u00b6\n\n\nA \ncopula\n is a \nprobability density\n that measures dependence among \nrandom variables\n.\nA (2-dimensional) copula takes 2 marginal/unconditional densities and \"glues\" them together to produce a \njoint cumulative density\n that contains all dependence data between the densities.\nThat is, the copula of 2 random variables is a \njoint cumulative density\n.\n\n\n\n\nCalculus\n\u00b6\n\n\nDifferential\n\u00b6\n\n\nThe \ndifferential\n of function \nf\n at a given point \na\n is a \nlinear function\n \ndf_a\n which best approximates \nf\n (among all other linear functions) \nnear\n the point \na\n.\n\n\nDifferentials\n are very important in \nintegral calculus\n because you can only \nintegrate\n differentials.\nThey're also very important in stochastic calculus because a continuous-time \nstochastic process\n is always \nnowhere differentiable\n, but it may have a \ndifferential\n, and so you may be able to integrate it.\n\n\n\n\nStochastic calculus\n\u00b6\n\n\nIto integral\n\u00b6\n\n\nThe \nIto integral\n is the stochastic calculus version of the Riemann integral.\n\n\nIto's lemma\n\u00b6\n\n\nIt's lemma\n is the stochastic calculus version of the \nchain rule\n.\n\n\nBrownian motion\n\u00b6\n\n\nBrownian motion\n is the random motion of particles in certain media.\n\n\nBrownian motion\n also refers to the mathematical machinery used to model such movement, in which case Brownian motion means \nWiener process\n.\n\n\nWiener process\n\u00b6\n\n\nThe \nWiener process\n is a continuous-time \nstochastic process\n with independent Gaussian increments and continuous paths.\n\n\nThe Wiener process can be constructed as some \nlimit\n of discrete-time stochastic processes, such as the \nscaling limit\n of a \nrandom walk\n. This is possible due to \nDonsker's theorem\n, an extension to the \ncentral limit theorem\n which involves \nconvergence in distribution\n of a sequence of stochastic processes.\n\n\nThe Wiener process underlies the \nBlack-Scholes model\n used in European \noptions\n pricing.\n\n\nMarkov process\n\u00b6\n\n\nLevy process\n\u00b6\n\n\nGaussian process\n\u00b6",
+            "title": "Glossary"
+        },
+        {
+            "location": "/glossary/#glossary",
+            "text": "",
+            "title": "Glossary"
+        },
+        {
+            "location": "/glossary/#stellar",
+            "text": "",
+            "title": "Stellar"
+        },
+        {
+            "location": "/glossary/#asset",
+            "text": "An  asset  in Stellar is a  security  issued by a specific  account  that can be traded in the Stellar exchange.  Assets can be \"cashed out\" with the asset issuer for whatever it is that the asset is intended to represent.  Accounts that issue assets are informally called  anchors .\nAny account can issue any asset to the network, so you must  trust  an account before you can hold assets it has issued.  An  asset  is given by the following data:   the asset  issuer  the asset  type  the asset  code .   The only exception to this rule is the  native  asset of the network, called the  lumen , which only has an asset type:  native .",
+            "title": "Asset"
+        },
+        {
+            "location": "/glossary/#anchor",
+            "text": "An  anchor  in Stellar is an  account  that issues assets and honors withdrawals for those assets.  By honoring withdrawals, anchors effectively serve as the link between the Stellar network and the physical world.\nThey're the entities that allow you, for instance,\nto hold cows in the Stellar network (which are sequences of zeros and ones) and \"cash them out\" for actual cows (which produce milk).  Anchors have total control over:   which accounts can hold their assets,  who the holders of their assets can trade those assets with, and  when the holders can withdraw those assets.   The notion of an anchor in the Stellar network is a  generalization of the notion of a bank in the physical world .\nA traditional bank holds cash and honors withdrawals for cash.\nA Stellar anchor",
+            "title": "Anchor"
+        },
+        {
+            "location": "/glossary/#account",
+            "text": "An  account  in Stellar is a special kind of entry in the ledger that can hold balances, issue assets, and trade assets.  An account is publicly identified by its  public key . Control  over an account rests with whoever knows the  secret seed  or the  secret key .  Example of a  public key :  GAPR4YI2IPPL7OBA6KG24OCQ4N35WHKNJEJIDTFOLNHLJUPDHACRX5AU \nExample of a  secret seed :  SBUNGVT2C4PHIC446T4QOFZ7LFD5NFXSJ46BIAME25R5DEXP24J765H5",
+            "title": "Account"
+        },
+        {
+            "location": "/glossary/#secret-seed",
+            "text": "The  secret seed  is a cryptographic object associated to an  account  from the which you can recover both the account's public key and private key.  In particular, this means that whoever knows the secret seed has control over the account.",
+            "title": "Secret seed"
+        },
+        {
+            "location": "/glossary/#trading",
+            "text": "",
+            "title": "Trading"
+        },
+        {
+            "location": "/glossary/#asset_1",
+            "text": "In trading, an  asset  is anything that be bought and sold (ie.  traded ) in a  market .",
+            "title": "Asset"
+        },
+        {
+            "location": "/glossary/#market",
+            "text": "A  market  is a place (physical or digital) where buyers meet sellers.  A  market  for an  asset   X  is a place (physical or digital) where buyers of  X  meet sellers of  X .",
+            "title": "Market"
+        },
+        {
+            "location": "/glossary/#limit-order",
+            "text": "A  limit order  is an order to trade at a  given  price, and it lives in the  orderbook  until a market order clears it.  Limit orders provide liquidity to the market, by exposing themselves to be fulfilled by market orders.",
+            "title": "Limit order"
+        },
+        {
+            "location": "/glossary/#market-order",
+            "text": "A  market order  is an order (to buy or sell) that is to be executed immediately, regardless of price.  Market orders take liquidity away from the market, by fulfilling limit orders.",
+            "title": "Market order"
+        },
+        {
+            "location": "/glossary/#orderbook",
+            "text": "The  orderbook , also called the  limit orderbook  or the book of  limit orders , is the list of all limit orders (both  bids  and  asks ).",
+            "title": "Orderbook"
+        },
+        {
+            "location": "/glossary/#bid",
+            "text": "A  bid offer  is a  limit order  for  buying  an  asset .  A  bid price  is the price of a bid offer, typically the lowest one.",
+            "title": "Bid"
+        },
+        {
+            "location": "/glossary/#ask",
+            "text": "An  ask offer  is a  limit order  for  selling  an  asset .  An  ask price  is the price of an ask offer, typically the highest one.",
+            "title": "Ask"
+        },
+        {
+            "location": "/glossary/#price",
+            "text": "In a  market , there's no such thing as  the  price of an asset.\nThere's only the  bid price , the  ask price , and the  last price  (which is the price at which the last market order cleared a limit order).  The problem of executing a large market order at the best  average price  given the available orderbook is known to be a  stochastic control problem . This is a problem in the first place because large market orders tend to  walk the orderbook .",
+            "title": "Price"
+        },
+        {
+            "location": "/glossary/#walking-the-orderbook",
+            "text": "If a  market order  is larger then the best matching limit order, the market order executes the best limit order first and then the limit orders that come above (or below) it, which have worse prices (for the issuer of the market order) than the best limit order.  This process of clearing worse and worse limit orders with a market order is known as  walking the orderbook .",
+            "title": "Walking the orderbook"
+        },
+        {
+            "location": "/glossary/#liquidity",
+            "text": "Intuitively,  liquidity  is a measure of how easy/hard it is to trade an asset.  The amount of limit orders in the  orderbook  is a rough/naive measure of liquidity.",
+            "title": "Liquidity"
+        },
+        {
+            "location": "/glossary/#market-depth",
+            "text": "",
+            "title": "Market depth"
+        },
+        {
+            "location": "/glossary/#probability",
+            "text": "",
+            "title": "Probability"
+        },
+        {
+            "location": "/glossary/#random-variable",
+            "text": "A  random variable  is a  function  from the  sample space  to the  state space .  Random variables are not variables in the sense of high-school algebra, but functions in the sense of calculus.",
+            "title": "Random variable"
+        },
+        {
+            "location": "/glossary/#stochastic-process",
+            "text": "A  stochastic process  is a  function  whose values are  random variables .  Random variables  are to  stochastic processes  as  numbers  are to  functions . \nOne observation/sample of a random variable yields a (single) number. \nOne observation/sample of a random process yields a (single) function.",
+            "title": "Stochastic process"
+        },
+        {
+            "location": "/glossary/#copula",
+            "text": "A  copula  is a  probability density  that measures dependence among  random variables .\nA (2-dimensional) copula takes 2 marginal/unconditional densities and \"glues\" them together to produce a  joint cumulative density  that contains all dependence data between the densities.\nThat is, the copula of 2 random variables is a  joint cumulative density .",
+            "title": "Copula"
+        },
+        {
+            "location": "/glossary/#calculus",
+            "text": "",
+            "title": "Calculus"
+        },
+        {
+            "location": "/glossary/#differential",
+            "text": "The  differential  of function  f  at a given point  a  is a  linear function   df_a  which best approximates  f  (among all other linear functions)  near  the point  a .  Differentials  are very important in  integral calculus  because you can only  integrate  differentials.\nThey're also very important in stochastic calculus because a continuous-time  stochastic process  is always  nowhere differentiable , but it may have a  differential , and so you may be able to integrate it.",
+            "title": "Differential"
+        },
+        {
+            "location": "/glossary/#stochastic-calculus",
+            "text": "",
+            "title": "Stochastic calculus"
+        },
+        {
+            "location": "/glossary/#ito-integral",
+            "text": "The  Ito integral  is the stochastic calculus version of the Riemann integral.",
+            "title": "Ito integral"
+        },
+        {
+            "location": "/glossary/#itos-lemma",
+            "text": "It's lemma  is the stochastic calculus version of the  chain rule .",
+            "title": "Ito's lemma"
+        },
+        {
+            "location": "/glossary/#brownian-motion",
+            "text": "Brownian motion  is the random motion of particles in certain media.  Brownian motion  also refers to the mathematical machinery used to model such movement, in which case Brownian motion means  Wiener process .",
+            "title": "Brownian motion"
+        },
+        {
+            "location": "/glossary/#wiener-process",
+            "text": "The  Wiener process  is a continuous-time  stochastic process  with independent Gaussian increments and continuous paths.  The Wiener process can be constructed as some  limit  of discrete-time stochastic processes, such as the  scaling limit  of a  random walk . This is possible due to  Donsker's theorem , an extension to the  central limit theorem  which involves  convergence in distribution  of a sequence of stochastic processes.  The Wiener process underlies the  Black-Scholes model  used in European  options  pricing.",
+            "title": "Wiener process"
+        },
+        {
+            "location": "/glossary/#markov-process",
+            "text": "",
+            "title": "Markov process"
+        },
+        {
+            "location": "/glossary/#levy-process",
+            "text": "",
+            "title": "Levy process"
+        },
+        {
+            "location": "/glossary/#gaussian-process",
+            "text": "",
+            "title": "Gaussian process"
+        }
+    ]
+}
