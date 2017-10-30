@@ -26,7 +26,7 @@ With `c_stellar_sdk` you can:
 payments,
 [orderbooks](https://www.stellar.org/developers/horizon/reference/resources/orderbook.html),
 [offers](https://www.stellar.org/developers/horizon/reference/resources/offer.html)
-1. Get **data** from the Stellar descentralized exchange: prices, orders *(coming soon!)*
+1. Get **data** from the Stellar descentralized exchange: prices, volume, orders *(coming soon!)*
 1. Submit **transactions** to the network *(coming soon!)*
 
 
