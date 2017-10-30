@@ -263,22 +263,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#send-a-payment-with-an-account" title="Send a payment with an account" class="md-nav__link">
-    Send a payment with an account
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
   <a href="#show-all-ledgers-in-the-returned-records" title="Show all ledgers in the (returned) records" class="md-nav__link">
     Show all ledgers in the (returned) records
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
         
@@ -436,22 +423,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#send-a-payment-with-an-account" title="Send a payment with an account" class="md-nav__link">
-    Send a payment with an account
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
   <a href="#show-all-ledgers-in-the-returned-records" title="Show all ledgers in the (returned) records" class="md-nav__link">
     Show all ledgers in the (returned) records
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
         
@@ -527,7 +501,6 @@ it also provides custom helpers for getting financials (eg. time series for pric
 <h2 id="capabilities">Capabilities<a class="headerlink" href="#capabilities" title="Permanent link">&para;</a></h2>
 <p>With <code>c_stellar_sdk</code> you can:</p>
 <ol>
-<li>Get <strong>data</strong> from the Stellar descentralized exchange: prices, orders</li>
 <li>Query the <strong>state</strong> of the network:
 <a href="https://www.stellar.org/developers/horizon/reference/resources/account.html">accounts</a>,
 <a href="https://www.stellar.org/developers/horizon/reference/resources/ledger.html">ledgers</a>,
@@ -537,6 +510,7 @@ it also provides custom helpers for getting financials (eg. time series for pric
 payments,
 <a href="https://www.stellar.org/developers/horizon/reference/resources/orderbook.html">orderbooks</a>,
 <a href="https://www.stellar.org/developers/horizon/reference/resources/offer.html">offers</a></li>
+<li>Get <strong>data</strong> from the Stellar descentralized exchange: prices, orders <em>(coming soon!)</em></li>
 <li>Submit <strong>transactions</strong> to the network <em>(coming soon!)</em></li>
 </ol>
 <h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
@@ -577,20 +551,7 @@ payments,
 </pre></div>
 
 
-<h4 id="send-a-payment-with-an-account">Send a payment with an account<a class="headerlink" href="#send-a-payment-with-an-account" title="Permanent link">&para;</a></h4>
-<div class="codehilite"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;stellar_sdk.h&quot;</span><span class="cp"></span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
-  <span class="c1">// 0. Build the transaction</span>
-
-  <span class="c1">// 1. Sign the transaction with the secret seed</span>
-
-  <span class="c1">// 2. Submit the transaction to the network</span>
-<span class="p">}</span>
-</pre></div>
-
-
-<h5 id="show-all-ledgers-in-the-returned-records">Show all ledgers in the (returned) records<a class="headerlink" href="#show-all-ledgers-in-the-returned-records" title="Permanent link">&para;</a></h5>
+<h4 id="show-all-ledgers-in-the-returned-records">Show all ledgers in the (returned) records<a class="headerlink" href="#show-all-ledgers-in-the-returned-records" title="Permanent link">&para;</a></h4>
 <div class="codehilite"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;stellar_sdk.h&quot;</span><span class="cp"></span>
 
 <span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
