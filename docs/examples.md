@@ -2,19 +2,6 @@
 
 ## High-level (synchronous) API
 
-#### Get XLM/CNY price data
-
-#### Find the [**value-at-risk (VaR)**](https://en.wikipedia.org/wiki/Value_at_risk) for the XLM/CNY price
-
-#### Forecast the volatility of the XLM/CNY price with a [GARCH(1,1)](https://en.wikipedia.org/wiki/Autoregressive_conditional_heteroskedasticity#NGARCH) model
-
-#### Do a [linear regression](https://en.wikipedia.org/wiki/Linear_regression) on XLM/CNY price
-
-#### Price a purported [European call option](https://en.wikipedia.org/wiki/Option_style) on XLM under the [Black-Scholes pricing model](https://en.wikipedia.org/wiki/Black%E2%80%93Scholes_model)
-
-#### Compute the implied volatility of a purported [European call option](https://en.wikipedia.org/wiki/Option_style) on XLM under the [Black-Scholes pricing model](https://en.wikipedia.org/wiki/Black%E2%80%93Scholes_model)
-
-  
 ---------------------------------------------------------------------------------------------------
 #### View account balances (all assets)
 
@@ -907,3 +894,16 @@ int main(){
   m_exit_success();
 }
 ```
+
+---------------------------------------------------------------------------------------------------
+#### Get XLM/CNY price data
+
+#### Find the [**value-at-risk (VaR)**](https://en.wikipedia.org/wiki/Value_at_risk) for the XLM/CNY price
+
+#### Forecast the volatility of the XLM/CNY price with a [GARCH(1,1)](https://en.wikipedia.org/wiki/Autoregressive_conditional_heteroskedasticity#NGARCH) model
+
+#### Do a [linear regression](https://en.wikipedia.org/wiki/Linear_regression) on XLM/CNY price
+
+#### Price a purported [European call option](https://en.wikipedia.org/wiki/Option_style) on XLM under the [Black-Scholes pricing model](https://en.wikipedia.org/wiki/Black%E2%80%93Scholes_model)
+
+#### Compute the implied volatility of a purported [European call option](https://en.wikipedia.org/wiki/Option_style) on XLM under the [Black-Scholes pricing model](https://en.wikipedia.org/wiki/Black%E2%80%93Scholes_model)

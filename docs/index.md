@@ -17,7 +17,6 @@ The Stellar network maintains a sequence of so-called [**ledgers**](https://www.
 
 With `c_stellar_sdk` you can:
 
-1. Get **data** from the Stellar descentralized exchange: prices, orders
 1. Query the **state** of the network:
 [accounts](https://www.stellar.org/developers/horizon/reference/resources/account.html),
 [ledgers](https://www.stellar.org/developers/horizon/reference/resources/ledger.html),
@@ -27,8 +26,92 @@ With `c_stellar_sdk` you can:
 payments,
 [orderbooks](https://www.stellar.org/developers/horizon/reference/resources/orderbook.html),
 [offers](https://www.stellar.org/developers/horizon/reference/resources/offer.html)
-1. Submit **transactions** to the network
+1. Get **data** from the Stellar descentralized exchange: prices, orders *(coming soon!)*
+1. Submit **transactions** to the network *(coming soon!)*
 
+
+## Examples
+
+For all example, see the [docs](http://cstellar.org).
+
+#### View account balances (all assets)
+
+```c
+#include "stellar_sdk.h"
+
+int main(){
+  struct xlm_Horizon horizon;
+  xlm_horizon_init(&horizon, XLM_HORIZON_LIVE);  // Or `XLM_HORIZON_TESTNET`
+
+  struct xlm_Response response;
+  xlm_response_init(&response);
+
+  struct xlm_Request_params request_params = {
+    .account_id = "GB7JKG66CJN3ACX5DX43FOZTTSOI7GZUP547I3BSXIJVUX3NRYUXHE6W",
+  };
+
+  xlm_account(&horizon, &response, &request_params);  // Send request!
+
+  xlm_JSON* json_root = json_parse(response.raw);  // Parse a raw JSON string!
+  xlm_JSON* json_balances = json_get(json_root, "balances");
+  json_show(json_balances);
+
+  m_sep();
+  for(uint i=0; i<json_get_array_len(json_balances); ++i){
+    xlm_JSON* json_balance_item = json_get_array_item(json_balances, i);
+    xlm_JSON* json_balance = json_get(json_balance_item, "balance");
+    xlm_JSON* json_asset_type = json_get(json_balance_item, "asset_type");
+    printf("%s  %s\n", json_asset_type->valuestring, json_balance->valuestring);
+  }
+
+  json_free(json_root);  // Deleting the root takes care of everything
+  xlm_response_free(&response);
+  xlm_horizon_free(&horizon);
+  m_exit_success();
+}
+```
+
+#### Show all ledgers in the (returned) records
+
+```c
+#include "stellar_sdk.h"
+
+int main(){
+  struct xlm_Horizon horizon;
+  xlm_horizon_init(&horizon, XLM_HORIZON_LIVE);  // Or `XLM_HORIZON_TESTNET`
+
+  struct xlm_Response response;
+  xlm_response_init(&response);
+
+  struct xlm_Request_params request_params = {
+    .cursor = 60496199207092224,
+    .order = "desc",
+    .limit = 4,
+  };
+
+  xlm_ledgers(&horizon, &response, &request_params);  // Send request!
+
+  xlm_JSON* json_root = json_parse(response.raw);  // Parse a raw JSON string!
+  xlm_JSON* json_embedded = json_get(json_root, "_embedded");
+  xlm_JSON* json_records = json_get(json_embedded, "records");
+  json_show(json_records);
+
+  uint n_records = json_get_array_len(json_records);
+
+  m_sep();
+  for(uint i=0; i<n_records; ++i){  // Grab all ledgers from the records!
+    xlm_JSON* json_record = json_get_array_item(json_records, i);
+    struct xlm_Ledger ledger;
+    xlm_ledger_from_json(&ledger, json_record);
+    puts("");  xlm_ledger_show(&ledger);  // Show the ledger object from its internal format
+  }
+
+  json_free(json_root);  // Deleting the root takes care of everything
+  xlm_response_free(&response);
+  xlm_horizon_free(&horizon);
+  m_exit_success();
+}
+```
 
 ## Implementation details
 
@@ -41,7 +124,7 @@ These libraries are wrapped in a thin abstraction layer, so that high-level func
 and they may be replaced by similar libraries, provided one adapts the internals of the abstraction layer keeping the external interface consistent.
 
 
-## Overview of the API
+<!-- ## Overview of the API
 
 The Horizon API supports multiple types of requests, with varying degrees of complexity.
 Very roughly, the complexity of requests can be classified as follows.
@@ -49,7 +132,7 @@ Very roughly, the complexity of requests can be classified as follows.
 1. Requests that take no parameters. Example: Horizon metrics
 1. Requests that take one set of parameters. Example: ledgers
 1. Requests that take multiple sets of parameters. Example: transactions for account
-1. Requests that take multiple sets of parameters and require authentication.
+1. Requests that take multiple sets of parameters and require authentication. -->
 
 ## Dependencies
 
@@ -86,15 +169,16 @@ to build the HTML/CSS/JS files into a `site/` directory, or run
 to serve it locally on `http://127.0.0.1:8000`.
 
 
-## Build examples manually
+<!-- ## Build examples manually
 
     gcc xlm_example_trades
-
+ -->
 
 ## TODOs
 
+- Perform operations (eg. `change_trust`, `manage_offer`)
+- Build, sign & submit transactions
 - Decode XDR blobs
-- Perform more operations (eg. `change_trust`, `manage_offer`)
 - Write a high-level API for event streams (currently accessible by low-level routines)
 - Write a high-level API for async requests (currently accessible by low-level routines)
 - Write tests
