@@ -1,0 +1,31 @@
+site_name: c_stellar_sdk docs
+repo_name: 'etale-cohomology/c_stellar_sdk'
+repo_url: 'https://github.com/etale-cohomology/c_stellar_sdk'
+
+theme: 'material'
+site_favicon: 'favicon.png'
+
+pages:
+  - 'index.md'
+  - 'examples.md'
+  - 'data_structures.md'
+  - 'functions.md'
+  - 'glossary.md'
+
+extra:
+  palette:
+    primary: 'blue'
+    accent: 'pink'
+  logo: 'favicon.png'
+  social:
+    - type: 'github'
+      link: 'https://github.com/etale-cohomology'
+  language: 'en'
+  font:
+    text: 'Montserrat'
+    code: 'Roboto Mono'
+
+markdown_extensions:
+  - codehilite
+  - toc:
+      permalink: true
