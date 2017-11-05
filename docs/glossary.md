@@ -9,9 +9,10 @@
 An **asset** in Stellar is a *security* issued by a specific **account** that can be traded in the Stellar exchange.
 
 Assets can be "cashed out" with the asset issuer for whatever it is that the asset is intended to represent.
-
 Accounts that issue assets are informally called **anchors**.
-Any account can issue any asset to the network, so you must **trust** an account before you can hold assets it has issued.
+
+*Any* account can issue *any* asset to the network and call it *anything* they like,
+so you must **trust** an account before you can hold assets it has issued.
 
 An **asset** is given by the following data:
 
@@ -184,3 +185,43 @@ The Wiener process underlies the [Black-Scholes model](https://en.wikipedia.org/
 ## Levy process
 
 ## Gaussian process
+
+---------------------------------------------------------------------------------------------------
+## Algebra
+
+### Ring
+
+A [**ring**](https://en.wikipedia.org/wiki/Ring_(mathematics)) is a [set](https://en.wikipedia.org/wiki/Set_(mathematics)) where you can always add, subtract, and multiply elements (but not necessarily divide).
+
+Rings are very important in pure mathematics, cryptography, and computer science.
+
+Some examples:
+
+- The set of all [integers](https://en.wikipedia.org/wiki/Integer) forms a ring denoted `Z` (from the German word *Zahlen*).
+- The set of all unsigned 32-bit integers forms a (finite) ring denoted `Z/4294967296Z`, with `4294967296` elements. Notice that the integer `4294967296` is the 32-nd power of 2.
+- The set of all unsigned 64-bit integers forms a (finite) ring denoted `Z/18446744073709551616Z`, with `18446744073709551616` elements. Notice that the integer `18446744073709551616` is the 64-th power of 2.
+- The set of all continuous functions from the real numbers to the real numbers forms a ring.
+
+### Field
+
+A [**field**](https://en.wikipedia.org/wiki/Field_(mathematics)) is a [set](https://en.wikipedia.org/wiki/Set_(mathematics)) where you can always add, subtract, and multiply elements (but not necessarily divide).
+
+Fields are very important in pure mathematics, cryptography, and computer science.
+
+Finite fields are important in cryptography because computing [logarithms](https://en.wikipedia.org/wiki/Discrete_logarithm) is thought to be very expensive in large finite fields.
+
+Some examples:
+
+- The set of all [rational numbers](https://en.wikipedia.org/wiki/Rational_number) forms a field, denoted `Q`
+- The set of all [constructible numbers](https://en.wikipedia.org/wiki/Constructible_numbers) forms a field.
+- The set of all [real numbers](https://en.wikipedia.org/wiki/Real_number) forms a field, denoted `R`.
+- The set of all [complex numbers](https://en.wikipedia.org/wiki/Complex_number) forms a field, denoted `C`.
+- The ring `Z/3Z` is a (finite) field, also denoted `F3` (for *field with 3 elements*) or `GF(3)` (for *Galois field with 3 elements*).
+- An infinite family of finite fields is given by fields of the form `Z/pZ`, where `p` is a prime number. At each prime `p`, the ring `Z/pZ` is a finite field, also denoted `Fp` (for *field with `p` elements*) or `GF(p)` (for *Galois field with `p` elements*).
+- An infinite family of fields are given by [**global fields**](https://en.wikipedia.org/wiki/Global_field), which are finite-dimensional extensions of the field `Q` of rational numbers or finite-dimensional extensions of the field `Fq(t)` of rational functions over the finite field `Fq` (where `q` is a **prime power**).
+
+### Absolute Galois group
+
+The [**absolute Galois group**](https://en.wikipedia.org/wiki/Absolute_Galois_group) of a field `F`, denoted `Gal(F)`, is a **group** that encodes data for all the **separable extensions** of `F`.
+
+The absolute Galois group of the finite field `GF(p)`, denoted `Gal(GF(p))`, is the [Prufer group](https://en.wikipedia.org/wiki/Pr%C3%BCfer_group).
