@@ -528,6 +528,40 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#algebra" title="Algebra" class="md-nav__link">
+    Algebra
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ring" title="Ring" class="md-nav__link">
+    Ring
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#field" title="Field" class="md-nav__link">
+    Field
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#absolute-galois-group" title="Absolute Galois group" class="md-nav__link">
+    Absolute Galois group
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
       
       
     </ul>
@@ -804,6 +838,40 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#algebra" title="Algebra" class="md-nav__link">
+    Algebra
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ring" title="Ring" class="md-nav__link">
+    Ring
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#field" title="Field" class="md-nav__link">
+    Field
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#absolute-galois-group" title="Absolute Galois group" class="md-nav__link">
+    Absolute Galois group
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
       
       
     </ul>
@@ -824,9 +892,10 @@
 <h2 id="stellar">Stellar<a class="headerlink" href="#stellar" title="Permanent link">&para;</a></h2>
 <h3 id="asset">Asset<a class="headerlink" href="#asset" title="Permanent link">&para;</a></h3>
 <p>An <strong>asset</strong> in Stellar is a <em>security</em> issued by a specific <strong>account</strong> that can be traded in the Stellar exchange.</p>
-<p>Assets can be "cashed out" with the asset issuer for whatever it is that the asset is intended to represent.</p>
-<p>Accounts that issue assets are informally called <strong>anchors</strong>.
-Any account can issue any asset to the network, so you must <strong>trust</strong> an account before you can hold assets it has issued.</p>
+<p>Assets can be "cashed out" with the asset issuer for whatever it is that the asset is intended to represent.
+Accounts that issue assets are informally called <strong>anchors</strong>.</p>
+<p><em>Any</em> account can issue <em>any</em> asset to the network and call it <em>anything</em> they like,
+so you must <strong>trust</strong> an account before you can hold assets it has issued.</p>
 <p>An <strong>asset</strong> is given by the following data:</p>
 <ul>
 <li>the asset <strong>issuer</strong></li>
@@ -925,6 +994,35 @@ They're also very important in stochastic calculus because a continuous-time <st
 <h2 id="markov-process">Markov process<a class="headerlink" href="#markov-process" title="Permanent link">&para;</a></h2>
 <h2 id="levy-process">Levy process<a class="headerlink" href="#levy-process" title="Permanent link">&para;</a></h2>
 <h2 id="gaussian-process">Gaussian process<a class="headerlink" href="#gaussian-process" title="Permanent link">&para;</a></h2>
+<hr />
+<h2 id="algebra">Algebra<a class="headerlink" href="#algebra" title="Permanent link">&para;</a></h2>
+<h3 id="ring">Ring<a class="headerlink" href="#ring" title="Permanent link">&para;</a></h3>
+<p>A <a href="https://en.wikipedia.org/wiki/Ring_(mathematics)"><strong>ring</strong></a> is a <a href="https://en.wikipedia.org/wiki/Set_(mathematics)">set</a> where you can always add, subtract, and multiply elements (but not necessarily divide).</p>
+<p>Rings are very important in pure mathematics, cryptography, and computer science.</p>
+<p>Some examples:</p>
+<ul>
+<li>The set of all <a href="https://en.wikipedia.org/wiki/Integer">integers</a> forms a ring denoted <code>Z</code> (from the German word <em>Zahlen</em>).</li>
+<li>The set of all unsigned 32-bit integers forms a (finite) ring denoted <code>Z/4294967296Z</code>, with <code>4294967296</code> elements. Notice that the integer <code>4294967296</code> is the 32-nd power of 2.</li>
+<li>The set of all unsigned 64-bit integers forms a (finite) ring denoted <code>Z/18446744073709551616Z</code>, with <code>18446744073709551616</code> elements. Notice that the integer <code>18446744073709551616</code> is the 64-th power of 2.</li>
+<li>The set of all continuous functions from the real numbers to the real numbers forms a ring.</li>
+</ul>
+<h3 id="field">Field<a class="headerlink" href="#field" title="Permanent link">&para;</a></h3>
+<p>A <a href="https://en.wikipedia.org/wiki/Field_(mathematics)"><strong>field</strong></a> is a <a href="https://en.wikipedia.org/wiki/Set_(mathematics)">set</a> where you can always add, subtract, and multiply elements (but not necessarily divide).</p>
+<p>Fields are very important in pure mathematics, cryptography, and computer science.</p>
+<p>Finite fields are important in cryptography because computing <a href="https://en.wikipedia.org/wiki/Discrete_logarithm">logarithms</a> is thought to be very expensive in large finite fields.</p>
+<p>Some examples:</p>
+<ul>
+<li>The set of all <a href="https://en.wikipedia.org/wiki/Rational_number">rational numbers</a> forms a field, denoted <code>Q</code></li>
+<li>The set of all <a href="https://en.wikipedia.org/wiki/Constructible_numbers">constructible numbers</a> forms a field.</li>
+<li>The set of all <a href="https://en.wikipedia.org/wiki/Real_number">real numbers</a> forms a field, denoted <code>R</code>.</li>
+<li>The set of all <a href="https://en.wikipedia.org/wiki/Complex_number">complex numbers</a> forms a field, denoted <code>C</code>.</li>
+<li>The ring <code>Z/3Z</code> is a (finite) field, also denoted <code>F3</code> (for <em>field with 3 elements</em>) or <code>GF(3)</code> (for <em>Galois field with 3 elements</em>).</li>
+<li>An infinite family of finite fields is given by fields of the form <code>Z/pZ</code>, where <code>p</code> is a prime number. At each prime <code>p</code>, the ring <code>Z/pZ</code> is a finite field, also denoted <code>Fp</code> (for <em>field with <code>p</code> elements</em>) or <code>GF(p)</code> (for <em>Galois field with <code>p</code> elements</em>).</li>
+<li>An infinite family of fields are given by <a href="https://en.wikipedia.org/wiki/Global_field"><strong>global fields</strong></a>, which are finite-dimensional extensions of the field <code>Q</code> of rational numbers or finite-dimensional extensions of the field <code>Fq(t)</code> of rational functions over the finite field <code>Fq</code> (where <code>q</code> is a <strong>prime power</strong>).</li>
+</ul>
+<h3 id="absolute-galois-group">Absolute Galois group<a class="headerlink" href="#absolute-galois-group" title="Permanent link">&para;</a></h3>
+<p>The <a href="https://en.wikipedia.org/wiki/Absolute_Galois_group"><strong>absolute Galois group</strong></a> of a field <code>F</code>, denoted <code>Gal(F)</code>, is a <strong>group</strong> that encodes data for all the <strong>separable extensions</strong> of <code>F</code>.</p>
+<p>The absolute Galois group of the finite field <code>GF(p)</code>, denoted <code>Gal(GF(p))</code>, is the <a href="https://en.wikipedia.org/wiki/Pr%C3%BCfer_group">Prufer group</a>.</p>
                 
                   
                 
