@@ -941,7 +941,7 @@ Example of a <strong>secret seed</strong>: <code>SBUNGVT2C4PHIC446T4QOFZ7LFD5NFX
 <p>Market orders <em>take liquidity away from the market</em>, by fulfilling limit orders.</p>
 <h3 id="orderbook">Orderbook<a class="headerlink" href="#orderbook" title="Permanent link">&para;</a></h3>
 <p>The <strong>orderbook</strong>, also called the <strong>limit orderbook</strong> or the book of <strong>limit orders</strong>, is the list of all limit orders (both <strong>bids</strong> and <strong>asks</strong>).
-The amount of <strong>limit orders</strong> in the <strong>orderbook</strong> is a rough/naive measure of liquidity.</p>
+The amount of <strong>limit orders</strong> in the <strong>orderbook</strong> is a rough/naive measure of <strong>liquidity</strong>.</p>
 <h3 id="bid">Bid<a class="headerlink" href="#bid" title="Permanent link">&para;</a></h3>
 <p>A <strong>bid offer</strong> is a <strong>limit order</strong> for <em>buying</em> an <strong>asset</strong>.</p>
 <p>A <strong>bid price</strong> is the price of a bid offer, typically the lowest one.</p>
@@ -951,20 +951,24 @@ The amount of <strong>limit orders</strong> in the <strong>orderbook</strong> is
 <h3 id="price">Price<a class="headerlink" href="#price" title="Permanent link">&para;</a></h3>
 <p>In a <strong>market</strong>, there's no such thing as <em>the</em> price of an asset.
 There's only the <strong>bid price</strong>, the <strong>ask price</strong>, and the <strong>last price</strong> (which is the price at which the last market order cleared a limit order).</p>
-<p>The problem of executing a large market order at the best <em>average price</em> given the available orderbook is known to be a <a href="https://www.quantstart.com/articles/high-frequency-trading-iii-optimal-execution">stochastic control problem</a>. This is a problem in the first place because large market orders tend to <strong>walk the orderbook</strong>.</p>
+<p>The problem of executing a large market order at the best <em>average price</em> given the available orderbook is known to be a <a href="https://www.quantstart.com/articles/high-frequency-trading-iii-optimal-execution">stochastic control problem</a>. This is a problem in the first place because large market orders tend to <strong>walk the orderbook</strong>, so the <em>optimal rate</em> of which to execute a large market order (either or buy or sell an asset) to <em>maximize profits</em> is not obvious at all.</p>
 <h3 id="walking-the-orderbook">Walking the orderbook<a class="headerlink" href="#walking-the-orderbook" title="Permanent link">&para;</a></h3>
 <p>If a <strong>market order</strong> is larger then the best matching limit order, the market order executes the best limit order first and then the limit orders that come above (or below) it, which have worse prices (for the issuer of the market order) than the best limit order.</p>
 <p>This process of clearing worse and worse limit orders with a market order is known as <strong>walking the orderbook</strong>.</p>
 <h3 id="liquidity">Liquidity<a class="headerlink" href="#liquidity" title="Permanent link">&para;</a></h3>
 <p>Intuitively, <strong>liquidity</strong> is a measure of how easy/hard it is to trade an asset.</p>
 <p>The amount of <strong>limit orders</strong> in the <strong>orderbook</strong> is a rough/naive measure of liquidity, because anyone can place any limit order on the orderbook and withdraw it at will without any intention to allow the order to be fulfilled.</p>
-<p><strong>Liquity</strong> is one of the key attributes of an asset that <em>trades</em> in a <em>market</em>, and it can heavily affect the price of an asset.</p>
+<p><strong>Liquidity</strong> is one of the key attributes of an <strong>asset</strong> that <strong>trades</strong> in a <strong>market</strong>, and it can heavily affect the <strong>price</strong> of an asset.</p>
 <h3 id="market-depth">Market depth<a class="headerlink" href="#market-depth" title="Permanent link">&para;</a></h3>
+<p><strong>Market depth</strong> is a measure of a <strong>market</strong>'s capacity to absorb large <strong>market orders</strong> (which are liquidity-taking) <em>without affecting</em> the price of an <strong>asset</strong>. The greater the market depth a market has, the larger volume of <em>market orders</em> it can sustain without affecting the price of an asset.
+Market depth measures the volume of all <strong>limit orders</strong> in the <strong>orderbook</strong>.
+A market with a lot of depth is said to be <strong>deep</strong>. A market with little depth is said to be <strong>shallow</strong>.</p>
+<p>Market depth is closely related to <strong>liquidity</strong>.</p>
 <hr />
 <h2 id="probability">Probability<a class="headerlink" href="#probability" title="Permanent link">&para;</a></h2>
 <h3 id="random-variable">Random variable<a class="headerlink" href="#random-variable" title="Permanent link">&para;</a></h3>
 <p>A <a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=2&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwjBl4ar9oLXAhUMNSYKHVd_B8QQFgg1MAE&amp;url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FRandom_variable&amp;usg=AOvVaw3j4GvKQznPn0hgvOaM98f-"><strong>random variable</strong></a> is a <strong>function</strong> from the <strong>sample space</strong> to the <strong>state space</strong>.</p>
-<p>Random variables are not variables in the sense of high-school algebra, but functions in the sense of calculus.</p>
+<p>Random variables are <em>not</em> <strong>variables</strong> in the sense of high-school algebra, but <strong>functions</strong> in the sense of calculus.</p>
 <h3 id="stochastic-process">Stochastic process<a class="headerlink" href="#stochastic-process" title="Permanent link">&para;</a></h3>
 <p>A <strong>stochastic process</strong> is a <strong>function</strong> whose values are <strong>random variables</strong>.</p>
 <p><strong>Random variables</strong> are to <strong>stochastic processes</strong> as <strong>numbers</strong> are to <strong>functions</strong>.<br />
@@ -972,7 +976,7 @@ One observation/sample of a random variable yields a (single) number.<br />
 One observation/sample of a random process yields a (single) function.</p>
 <h3 id="copula">Copula<a class="headerlink" href="#copula" title="Permanent link">&para;</a></h3>
 <p>A <a href="https://en.wikipedia.org/wiki/Copula_(probability_theory)"><strong>copula</strong></a> is a <a href="https://en.wikipedia.org/wiki/Probability_density_function">probability density</a> that measures dependence among <a href="https://en.wikipedia.org/wiki/Random_variable">random variables</a>.
-A (2-dimensional) copula takes 2 marginal/unconditional densities and "glues" them together to produce a <a href="https://en.wikipedia.org/wiki/Cumulative_distribution_function#Multivariate_case">joint cumulative density</a> that contains all dependence data between the densities.
+A (2-dimensional) copula takes 2 marginal/unconditional densities and "glues" them together to produce a <a href="https://en.wikipedia.org/wiki/Cumulative_distribution_function#Multivariate_case">joint cumulative density</a> that encodes all dependency data between the densities.
 That is, the copula of 2 random variables is a <a href="https://en.wikipedia.org/wiki/Cumulative_distribution_function#Multivariate_case">joint cumulative density</a>.</p>
 <hr />
 <h2 id="calculus">Calculus<a class="headerlink" href="#calculus" title="Permanent link">&para;</a></h2>
