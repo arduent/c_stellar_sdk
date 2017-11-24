@@ -935,12 +935,13 @@ Example of a <strong>secret seed</strong>: <code>SBUNGVT2C4PHIC446T4QOFZ7LFD5NFX
 <p>A <strong>market</strong> for an <strong>asset</strong> <code>X</code> is a place (physical or digital) where buyers of <code>X</code> meet sellers of <code>X</code>.</p>
 <h3 id="limit-order">Limit order<a class="headerlink" href="#limit-order" title="Permanent link">&para;</a></h3>
 <p>A <strong>limit order</strong> is an order to trade at a <em>given</em> price, and it lives in the <strong>orderbook</strong> until a market order clears it.</p>
-<p>Limit orders provide liquidity to the market, by exposing themselves to be fulfilled by market orders.</p>
+<p>Limit orders <em>provide liquidity to the market</em>, by exposing themselves to be fulfilled by market orders.</p>
 <h3 id="market-order">Market order<a class="headerlink" href="#market-order" title="Permanent link">&para;</a></h3>
 <p>A <strong>market order</strong> is an order (to buy or sell) that is to be executed immediately, regardless of price.</p>
-<p>Market orders take liquidity away from the market, by fulfilling limit orders.</p>
+<p>Market orders <em>take liquidity away from the market</em>, by fulfilling limit orders.</p>
 <h3 id="orderbook">Orderbook<a class="headerlink" href="#orderbook" title="Permanent link">&para;</a></h3>
-<p>The <strong>orderbook</strong>, also called the <strong>limit orderbook</strong> or the book of <strong>limit orders</strong>, is the list of all limit orders (both <strong>bids</strong> and <strong>asks</strong>).</p>
+<p>The <strong>orderbook</strong>, also called the <strong>limit orderbook</strong> or the book of <strong>limit orders</strong>, is the list of all limit orders (both <strong>bids</strong> and <strong>asks</strong>).
+The amount of <strong>limit orders</strong> in the <strong>orderbook</strong> is a rough/naive measure of liquidity.</p>
 <h3 id="bid">Bid<a class="headerlink" href="#bid" title="Permanent link">&para;</a></h3>
 <p>A <strong>bid offer</strong> is a <strong>limit order</strong> for <em>buying</em> an <strong>asset</strong>.</p>
 <p>A <strong>bid price</strong> is the price of a bid offer, typically the lowest one.</p>
@@ -956,7 +957,8 @@ There's only the <strong>bid price</strong>, the <strong>ask price</strong>, and
 <p>This process of clearing worse and worse limit orders with a market order is known as <strong>walking the orderbook</strong>.</p>
 <h3 id="liquidity">Liquidity<a class="headerlink" href="#liquidity" title="Permanent link">&para;</a></h3>
 <p>Intuitively, <strong>liquidity</strong> is a measure of how easy/hard it is to trade an asset.</p>
-<p>The amount of limit orders in the <strong>orderbook</strong> is a rough/naive measure of liquidity.</p>
+<p>The amount of <strong>limit orders</strong> in the <strong>orderbook</strong> is a rough/naive measure of liquidity, because anyone can place any limit order on the orderbook and withdraw it at will without any intention to allow the order to be fulfilled.</p>
+<p><strong>Liquity</strong> is one of the key attributes of an asset that <em>trades</em> in a <em>market</em>, and it can heavily affect the price of an asset.</p>
 <h3 id="market-depth">Market depth<a class="headerlink" href="#market-depth" title="Permanent link">&para;</a></h3>
 <hr />
 <h2 id="probability">Probability<a class="headerlink" href="#probability" title="Permanent link">&para;</a></h2>
@@ -1009,7 +1011,7 @@ They're also very important in stochastic calculus because a continuous-time <st
 <h3 id="field">Field<a class="headerlink" href="#field" title="Permanent link">&para;</a></h3>
 <p>A <a href="https://en.wikipedia.org/wiki/Field_(mathematics)"><strong>field</strong></a> is a <a href="https://en.wikipedia.org/wiki/Set_(mathematics)">set</a> where you can always add, subtract, and multiply elements (but not necessarily divide).</p>
 <p>Fields are very important in pure mathematics, cryptography, and computer science.</p>
-<p>Finite fields are important in cryptography because computing <a href="https://en.wikipedia.org/wiki/Discrete_logarithm">logarithms</a> is thought to be very expensive in large finite fields.</p>
+<p>Finite fields are important in cryptography because <a href="https://en.wikipedia.org/wiki/Discrete_logarithm">logarithms</a> is thought to be very expensive in large finite fields. More precisely, no one has found a subexponential algorithm to compute these logarithms (except in special cases).</p>
 <p>Some examples:</p>
 <ul>
 <li>The set of all <a href="https://en.wikipedia.org/wiki/Rational_number">rational numbers</a> forms a field, denoted <code>Q</code></li>
