@@ -74,17 +74,18 @@ A **market** for an **asset** `X` is a place (physical or digital) where buyers 
 
 A **limit order** is an order to trade at a *given* price, and it lives in the **orderbook** until a market order clears it.
 
-Limit orders provide liquidity to the market, by exposing themselves to be fulfilled by market orders.
+Limit orders *provide liquidity to the market*, by exposing themselves to be fulfilled by market orders.
 
 ### Market order
 
 A **market order** is an order (to buy or sell) that is to be executed immediately, regardless of price.
 
-Market orders take liquidity away from the market, by fulfilling limit orders.
+Market orders *take liquidity away from the market*, by fulfilling limit orders.
 
 ### Orderbook
 
 The **orderbook**, also called the **limit orderbook** or the book of **limit orders**, is the list of all limit orders (both **bids** and **asks**).
+The amount of **limit orders** in the **orderbook** is a rough/naive measure of **liquidity**.
 
 ### Bid
 
@@ -103,7 +104,7 @@ An **ask price** is the price of an ask offer, typically the highest one.
 In a **market**, there's no such thing as *the* price of an asset.
 There's only the **bid price**, the **ask price**, and the **last price** (which is the price at which the last market order cleared a limit order).
 
-The problem of executing a large market order at the best *average price* given the available orderbook is known to be a [stochastic control problem](https://www.quantstart.com/articles/high-frequency-trading-iii-optimal-execution). This is a problem in the first place because large market orders tend to **walk the orderbook**.
+The problem of executing a large market order at the best *average price* given the available orderbook is known to be a [stochastic control problem](https://www.quantstart.com/articles/high-frequency-trading-iii-optimal-execution). This is a problem in the first place because large market orders tend to **walk the orderbook**, so the *optimal rate* of which to execute a large market order (either or buy or sell an asset) to *maximize profits* is not obvious at all.
 
 ### Walking the orderbook
 
@@ -115,9 +116,17 @@ This process of clearing worse and worse limit orders with a market order is kno
 
 Intuitively, **liquidity** is a measure of how easy/hard it is to trade an asset.
 
-The amount of limit orders in the **orderbook** is a rough/naive measure of liquidity.
+The amount of **limit orders** in the **orderbook** is a rough/naive measure of liquidity, because anyone can place any limit order on the orderbook and withdraw it at will without any intention to allow the order to be fulfilled.
+
+**Liquidity** is one of the key attributes of an **asset** that **trades** in a **market**, and it can heavily affect the **price** of an asset.
 
 ### Market depth
+
+**Market depth** is a measure of a **market**'s capacity to absorb large **market orders** (which are liquidity-taking) *without affecting* the price of an **asset**. The greater the market depth a market has, the larger volume of *market orders* it can sustain without affecting the price of an asset.
+Market depth measures the volume of all **limit orders** in the **orderbook**.
+A market with a lot of depth is said to be **deep**. A market with little depth is said to be **shallow**.
+
+Market depth is closely related to **liquidity**.
 
 
 ---------------------------------------------------------------------------------------------------
@@ -127,7 +136,7 @@ The amount of limit orders in the **orderbook** is a rough/naive measure of liqu
 
 A [**random variable**](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=2&cad=rja&uact=8&ved=0ahUKEwjBl4ar9oLXAhUMNSYKHVd_B8QQFgg1MAE&url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FRandom_variable&usg=AOvVaw3j4GvKQznPn0hgvOaM98f-) is a **function** from the **sample space** to the **state space**.
 
-Random variables are not variables in the sense of high-school algebra, but functions in the sense of calculus.
+Random variables are *not* **variables** in the sense of high-school algebra, but **functions** in the sense of calculus.
 
 ### Stochastic process
 
@@ -140,7 +149,7 @@ One observation/sample of a random process yields a (single) function.
 ### Copula
 
 A [**copula**](https://en.wikipedia.org/wiki/Copula_(probability_theory)) is a [probability density](https://en.wikipedia.org/wiki/Probability_density_function) that measures dependence among [random variables](https://en.wikipedia.org/wiki/Random_variable).
-A (2-dimensional) copula takes 2 marginal/unconditional densities and "glues" them together to produce a [joint cumulative density](https://en.wikipedia.org/wiki/Cumulative_distribution_function#Multivariate_case) that contains all dependence data between the densities.
+A (2-dimensional) copula takes 2 marginal/unconditional densities and "glues" them together to produce a [joint cumulative density](https://en.wikipedia.org/wiki/Cumulative_distribution_function#Multivariate_case) that encodes all dependency data between the densities.
 That is, the copula of 2 random variables is a [joint cumulative density](https://en.wikipedia.org/wiki/Cumulative_distribution_function#Multivariate_case).
 
 
@@ -208,7 +217,7 @@ A [**field**](https://en.wikipedia.org/wiki/Field_(mathematics)) is a [set](http
 
 Fields are very important in pure mathematics, cryptography, and computer science.
 
-Finite fields are important in cryptography because computing [logarithms](https://en.wikipedia.org/wiki/Discrete_logarithm) is thought to be very expensive in large finite fields.
+Finite fields are important in cryptography because [logarithms](https://en.wikipedia.org/wiki/Discrete_logarithm) is thought to be very expensive in large finite fields. More precisely, no one has found a subexponential algorithm to compute these logarithms (except in special cases).
 
 Some examples:
 
